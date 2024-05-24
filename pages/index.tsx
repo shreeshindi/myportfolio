@@ -40,7 +40,7 @@ const Home = () => {
         id="bonkers-button"
         className={`mt-8 bg-red-500 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? styles.animateBonkers : ''}`}
       >
-        Click Me
+        Hire me!
       </button>
       {isNearButton && (
         <video

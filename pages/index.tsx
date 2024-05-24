@@ -1,5 +1,7 @@
 // pages/index.tsx
 import Head from 'next/head'
+import Eye from '../components/Eye'
+import styles from '../styles/Home.module.css'
 
 const Home = () => {
   return (
@@ -10,7 +12,7 @@ const Home = () => {
       <header className="bg-gray-900 text-white py-4">
         <h1 className="text-center text-3xl">My Portfolio</h1>
       </header>
-      <main className="container mx-auto p-4">
+      <main className="container mx-auto p-4 text-center">
         <section className="mb-8">
           <h2 className="text-2xl font-bold">About Me</h2>
           <p className="mt-2">Hello! I am a backend developer skilled in Spring Boot. Welcome to my portfolio website.</p>
@@ -34,6 +36,10 @@ const Home = () => {
           <h2 className="text-2xl font-bold">Contact</h2>
           <p className="mt-2">Email: yourname@example.com</p>
         </section>
+        <Eye />
+        <button className="mt-8 bg-blue-500 text-white py-2 px-4 rounded">
+          Click Me
+        </button>
       </main>
     </div>
   )

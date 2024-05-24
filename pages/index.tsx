@@ -1,18 +1,38 @@
-// pages/index.tsx
 import Head from 'next/head';
 import Eye from '../components/Eye';
 import styles from '../styles/Home.module.css';
+import { useState, useEffect } from 'react';
 
 const Home = () => {
+  const [isNearButton, setIsNearButton] = useState(false);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      console.log('Mouse moved:', event.clientX, event.clientY); // Debug log
+      const button = document.getElementById('bonkers-button');
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        console.log('Button rect:', rect); // Debug log
+        const isNear = (
+          event.clientX > rect.left - 50 &&
+          event.clientX < rect.right + 50 &&
+          event.clientY > rect.top - 50 &&
+          event.clientY < rect.bottom + 50
+        );
+        console.log('Mouse is near button:', isNear); // Debug log
+        setIsNearButton(isNear);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Head>
-        <title>My Portfolio</title>
-      </Head>
-      <header className="bg-gray-900 text-white py-4">
-        <h1 className="text-center text-3xl">My Portfolio</h1>
-      </header>
-      <main className="container mx-auto p-4 text-center">
+    <div className="min-h-screen bg-gray-100 relative">
+      <main className="container mx-auto p-4 text-center relative z-10">
         <section className="mb-8">
           <h2 className="text-2xl font-bold">About Me</h2>
           <p className="mt-2">Hello! I am a backend developer skilled in Spring Boot. Welcome to my portfolio website.</p>
@@ -40,10 +60,24 @@ const Home = () => {
           <Eye />
           <Eye />
         </div>
-        <button className="mt-8 bg-blue-500 text-white py-2 px-4 rounded">
+        <button
+          id="bonkers-button"
+          className={`mt-8 bg-red-500 text-white py-2 px-4 rounded transition-transform ${isNearButton ? styles.animateBonkers : ''}`}
+        >
           Click Me
         </button>
       </main>
+      {isNearButton && (
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          src="/video/jdi.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      )}
+      <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>
     </div>
   );
 };

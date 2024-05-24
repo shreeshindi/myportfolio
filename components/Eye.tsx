@@ -1,6 +1,7 @@
 // components/Eye.tsx
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import styles from '../styles/Eye.module.css';
 
 const Eye = () => {
   const eyeRef = useRef<HTMLDivElement>(null);
@@ -9,7 +10,7 @@ const Eye = () => {
   useEffect(() => {
     const eye = eyeRef.current;
     const pupil = pupilRef.current;
-    
+
     const handleMouseMove = (event: MouseEvent) => {
       if (!eye || !pupil) return;
 
@@ -21,22 +22,41 @@ const Eye = () => {
       const deltaY = event.clientY - eyeCenterY;
       const angle = Math.atan2(deltaY, deltaX);
 
-      const pupilMovement = 15; // Adjust this value for pupil movement radius
+      // Limit the distance to avoid unnatural behavior
+      const maxDistance = 10; // Adjusted to a smaller distance for realism
+      const distance = Math.min(maxDistance, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+      const pupilX = Math.cos(angle) * distance;
+      const pupilY = Math.sin(angle) * distance;
 
       gsap.to(pupil, {
-        x: Math.cos(angle) * pupilMovement,
-        y: Math.sin(angle) * pupilMovement,
+        x: pupilX,
+        y: pupilY,
         duration: 0.1,
       });
     };
 
+    const handleMouseLeave = () => {
+      if (!pupil) return;
+
+      gsap.to(pupil, {
+        x: 0,
+        y: 0,
+        duration: 0.3,
+      });
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+    };
   }, []);
 
   return (
-    <div className="eye" ref={eyeRef}>
-      <div className="pupil" ref={pupilRef}></div>
+    <div className={styles.eye} ref={eyeRef}>
+      <div className={styles.pupil} ref={pupilRef}></div>
     </div>
   );
 };

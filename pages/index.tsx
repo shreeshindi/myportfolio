@@ -1,7 +1,7 @@
 // pages/index.tsx
-import Head from 'next/head'
-import Eye from '../components/Eye'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Eye from '../components/Eye';
+import styles from '../styles/Home.module.css';
 
 const Home = () => {
   return (
@@ -36,13 +36,16 @@ const Home = () => {
           <h2 className="text-2xl font-bold">Contact</h2>
           <p className="mt-2">Email: yourname@example.com</p>
         </section>
-        <Eye />
+        <div className="flex justify-center items-center space-x-4">
+          <Eye />
+          <Eye />
+        </div>
         <button className="mt-8 bg-blue-500 text-white py-2 px-4 rounded">
           Click Me
         </button>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

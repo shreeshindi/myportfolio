@@ -3,7 +3,7 @@ import Head from 'next/head'
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-900">
       <Head>
         <title>My Portfolio</title>
       </Head>

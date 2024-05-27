@@ -11,19 +11,19 @@ const Eye = () => {
     const eye = eyeRef.current;
     const pupil = pupilRef.current;
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMove = (event: MouseEvent | TouchEvent) => {
       if (!eye || !pupil) return;
 
+      const { clientX, clientY } = 'touches' in event ? event.touches[0] : event;
       const rect = eye.getBoundingClientRect();
       const eyeCenterX = rect.left + rect.width / 2;
       const eyeCenterY = rect.top + rect.height / 2;
 
-      const deltaX = event.clientX - eyeCenterX;
-      const deltaY = event.clientY - eyeCenterY;
+      const deltaX = clientX - eyeCenterX;
+      const deltaY = clientY - eyeCenterY;
       const angle = Math.atan2(deltaY, deltaX);
 
-      // Limit the distance to avoid unnatural behavior
-      const maxDistance = 10; // Adjusted to a smaller distance for realism
+      const maxDistance = 10;
       const distance = Math.min(maxDistance, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
       const pupilX = Math.cos(angle) * distance;
       const pupilY = Math.sin(angle) * distance;
@@ -45,12 +45,16 @@ const Eye = () => {
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('touchend', handleMouseLeave);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleMouseLeave);
     };
   }, []);
 

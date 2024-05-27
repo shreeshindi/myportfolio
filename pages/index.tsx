@@ -8,23 +8,27 @@ const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMove = (event: MouseEvent | TouchEvent) => {
+      const { clientX, clientY } = 'touches' in event ? event.touches[0] : event;
       const button = document.getElementById('bonkers-button');
       if (button) {
         const rect = button.getBoundingClientRect();
         const isNear = (
-          event.clientX > rect.left - 50 &&
-          event.clientX < rect.right + 50 &&
-          event.clientY > rect.top - 50 &&
-          event.clientY < rect.bottom + 50
+          clientX > rect.left - 50 &&
+          clientX < rect.right + 50 &&
+          clientY > rect.top - 50 &&
+          clientY < rect.bottom + 50
         );
         setIsNearButton(isNear);
       }
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove);
+
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('touchmove', handleMove);
     };
   }, []);
 

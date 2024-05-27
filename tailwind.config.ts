@@ -11,6 +11,9 @@ const config: Config = {
       animation: {
         bonkers: 'bonkers 0.1s infinite',
       },
+      fontFamily: {
+        pressStart: ['"Press Start 2P"', 'cursive'],
+      },
       keyframes: {
         bonkers: {
           '0%, 100%': { transform: 'rotate(0deg)' },

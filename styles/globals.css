@@ -32,5 +32,8 @@ body {
   }
 }
 
+body {
+  @apply font-pressStart;
+}
 
 

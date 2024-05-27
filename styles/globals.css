@@ -36,5 +36,8 @@ body {
   @apply font-pressStart;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 

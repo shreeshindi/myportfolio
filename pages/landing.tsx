@@ -47,13 +47,16 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+    <div
+      className="min-h-screen bg-cover bg-center flex flex-col justify-center items-center"
+      style={{ backgroundImage: "url('/image/p1.jpg')" }}
+    >
       <Head>
         <title>Welcome to My Portfolio</title>
       </Head>
       <div className="text-center">
-        <h1  className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
-        <p className="text-xl" ref={textRef} >Scroll down to see more</p>
+        <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
+        <p className="text-xl" ref={textRef}>Scroll down to see more</p>
       </div>
     </div>
   );

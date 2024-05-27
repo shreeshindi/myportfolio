@@ -1,3 +1,4 @@
+// pages/index.tsx
 import Head from 'next/head';
 import Eye from '../components/Eye';
 import styles from '../styles/Home.module.css';
@@ -38,7 +39,7 @@ const Home = () => {
       </div>
       <button
         id="bonkers-button"
-        className={`mt-8 bg-red-500 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? styles.animateBonkers : ''}`}
+        className={`mt-8 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? styles.animateBonkers : ''} ${isNearButton ? styles.nearButton : 'bg-red-500'}`}
       >
         Hire me!
       </button>

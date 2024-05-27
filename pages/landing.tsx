@@ -1,7 +1,6 @@
 // pages/landing.tsx
 import Head from 'next/head';
 import { useEffect, useRef } from 'react';
-import styles from '../styles/Home.module.css';
 
 const Landing = () => {
   const textRef = useRef<HTMLDivElement>(null);
@@ -17,7 +16,7 @@ const Landing = () => {
         const chars = textElement.textContent!.split('');
         textElement.innerHTML = '';
 
-        chars.forEach((char, i) => {
+        chars.forEach((char) => {
           const span = document.createElement('span');
           span.textContent = char;
           textElement.appendChild(span);
@@ -48,7 +47,7 @@ const Landing = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex flex-col justify-center items-center"
+      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-center items-center"
       style={{ backgroundImage: "url('/image/p1.jpg')" }}
     >
       <Head>

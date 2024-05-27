@@ -1,7 +1,6 @@
 // pages/index.tsx
 import Head from 'next/head';
 import Eye from '../components/Eye';
-import styles from '../styles/Home.module.css';
 import { useState, useEffect } from 'react';
 import Landing from './landing';
 
@@ -38,7 +37,7 @@ const Home = () => {
       <Head>
         <title>My Portfolio</title>
       </Head>
-      <div id="landing" className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+      <div id="landing" className="min-h-screen">
         <Landing />
       </div>
       <div id="home" className="min-h-screen bg-gray-100 relative">
@@ -48,7 +47,7 @@ const Home = () => {
         </div>
         <button
           id="bonkers-button"
-          className={`mt-8 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? styles.animateBonkers : ''} ${isNearButton ? styles.nearButton : 'bg-red-500'}`}
+          className={`mt-8 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
         >
           Hire me!
         </button>

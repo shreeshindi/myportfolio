@@ -52,7 +52,7 @@ const Landing = () => {
         <title>Welcome to My Portfolio</title>
       </Head>
       <div className="text-center">
-        <h1 ref={textRef} className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
+        <h1  className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
         <p className="text-xl" ref={textRef} >Scroll down to see more</p>
       </div>
     </div>

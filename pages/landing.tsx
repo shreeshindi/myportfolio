@@ -1,4 +1,3 @@
-// pages/landing.tsx
 import Head from 'next/head';
 import { useEffect, useRef } from 'react';
 
@@ -68,12 +67,15 @@ const Landing = () => {
       <Head>
         <title>Shreenidhi</title>
       </Head>
-      <div className="text-center mt-12">
-        <h1 className="text-4xl font-bold mb-4 text-shadow">Welcome to My Portfolio</h1>
-        <p className="text-xl text-shadow" ref={textRef}>Scroll down to see more</p>
+      <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
+        <div className="text-lg sm:text-xl md:text-2xl mt-4 text-shadow" ref={textRef}>
+          <p>🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.</p>
+          <p>🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.</p>
+          <p>🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too – if those parties are tech meetups.</p>
+          <p>🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!</p>
+        </div>
       </div>
-
-      
     </div>
   );
 };

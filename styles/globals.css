@@ -39,7 +39,10 @@ body {
 html {
   scroll-behavior: smooth;
 }
-
+.bg-zoom {
+  transform: scale(1.1); /* Adjust the scale value as needed */
+  transform-origin: center;
+}
 .text-shadow {
   text-shadow:
     -1px -1px 0 #000,

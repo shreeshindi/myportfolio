@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 
 const Landing = () => {
   const textRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScrollTrigger = async () => {
@@ -40,6 +41,19 @@ const Landing = () => {
           },
         });
       }
+
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          y: '60%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: bgRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      }
     };
 
     handleScrollTrigger();
@@ -47,7 +61,8 @@ const Landing = () => {
 
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-center items-center"
+      ref={bgRef}
+      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-center items-center bg-zoom"
       style={{ backgroundImage: "url('/image/p1.jpg')" }}
     >
       <Head>

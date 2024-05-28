@@ -62,33 +62,18 @@ const Landing = () => {
   return (
     <div
       ref={bgRef}
-      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-center items-center"
+      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16"
       style={{ backgroundImage: "url('/image/p1.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <Head>
         <title>Shreenidhi</title>
       </Head>
-      <div className="text-center">
+      <div className="text-center mt-12">
         <h1 className="text-4xl font-bold mb-4 text-shadow">Welcome to My Portfolio</h1>
         <p className="text-xl text-shadow" ref={textRef}>Scroll down to see more</p>
       </div>
 
-      <style jsx>{`
-        .bg-cover {
-          background-attachment: fixed;
-        }
-        .text-shadow {
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        @media (max-width: 768px) {
-          .text-4xl {
-            font-size: 2.5rem;
-          }
-          .text-xl {
-            font-size: 1.25rem;
-          }
-        }
-      `}</style>
+      
     </div>
   );
 };

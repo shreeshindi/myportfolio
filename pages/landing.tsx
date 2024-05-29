@@ -70,14 +70,14 @@ const Landing = () => {
       <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
         <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mt-4 text-shadow space-y-6 text-left mx-auto" ref={textRef}>
-          <p className="mb-6">🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.</p>
-          <p className="mb-6">🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.</p>
-          <p className="mb-6">🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too – if those parties are tech meetups.</p>
-          <p className="mb-6">🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!</p>
+          <p className="mb-6">🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.<br /><br /></p>
+          <p className="mb-6">🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.<br /><br /></p>
+          <p className="mb-6">🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too – if those parties are tech meetups.<br /><br /></p>
+          <p className="mb-6">🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!<br /><br /></p>
         </div>
       </div>
-      {/* Adding more padding to increase the height of the page */}
-      <div style={{ paddingBottom: '80rem' }}></div>
+      {/* Adjusting padding to increase the height of the page */}
+      <div style={{ paddingBottom: '60rem' }}></div>
     </div>
   );
 };

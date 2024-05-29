@@ -81,7 +81,7 @@ const Landing = () => {
 </div>
 
       {/* Adjusting padding to increase the height of the page */}
-      <div style={{ paddingBottom: '60rem' }}></div>
+      <div style={{ paddingBottom: '40rem' }}></div>
     </div>
   );
 };

@@ -64,7 +64,7 @@ const Landing = () => {
     <div
       ref={bgRef}
       className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16"
-      style={{ backgroundImage: "url('/image/p1.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+      style={{ backgroundImage: "url('/image/p1.gif')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <Head>
         <title>Shreenidhi</title>

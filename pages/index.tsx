@@ -59,7 +59,7 @@ const Home = () => {
           />
         )}
         {!isButtonHovered && (
-          <div className="absolute bottom-0 left-0 z-20 flex space-x-4" style={{ transform: 'translate(110px, -210px)' }}>
+          <div className="absolute bottom-0 left-0 z-20 flex space-x-4" style={{ transform: 'translate(130px, -170px)' }}>
             <Eye />
             <Eye />
           </div>

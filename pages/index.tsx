@@ -6,6 +6,7 @@ import Landing from './landing';
 
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
@@ -32,6 +33,14 @@ const Home = () => {
     };
   }, []);
 
+  const handleMouseEnter = () => {
+    setIsButtonHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsButtonHovered(false);
+  };
+
   return (
     <div>
       <Head>
@@ -40,14 +49,29 @@ const Home = () => {
       <div id="landing" className="min-h-screen">
         <Landing />
       </div>
-      <div id="home" className="min-h-screen bg-gray-100 relative">
-        <div className="flex justify-center items-center space-x-4 relative z-10">
-          <Eye />
-          <Eye />
+      <div id="home" className="min-h-screen bg-gray-100 relative flex flex-col justify-center items-center">
+        {!isButtonHovered && (
+          <img
+            src="/image/cm.png" // Path to the provided image
+            alt="Your Image"
+            className="absolute bottom-0 left-0 z-10 w-72 h-72" // Increased size
+            style={{ margin: 0, padding: 0 }}
+          />
+        )}
+        {!isButtonHovered && (
+          <div className="absolute bottom-0 left-0 z-20 flex space-x-4" style={{ transform: 'translate(110px, -210px)' }}>
+            <Eye />
+            <Eye />
+          </div>
+        )}
+        <div className="flex justify-center items-center space-x-4 relative z-10 mb-4">
+          {/* Removed Eye components from here */}
         </div>
         <button
           id="bonkers-button"
-          className={`mt-8 text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className={`text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
         >
           Hire me!
         </button>

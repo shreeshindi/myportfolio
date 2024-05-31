@@ -1,7 +1,7 @@
 /* styles/Eye.module.css */
 .eye {
-  width: 50px;
-  height: 50px;
+  width: 30px; /* Smaller size */
+  height: 30px;
   background-color: white;
   border: 2px solid black;
   border-radius: 50%;
@@ -9,12 +9,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 10px;
+  margin: 0 5px; /* Smaller margin */
 }
 
 .pupil {
-  width: 20px;
-  height: 20px;
+  width: 10px; /* Smaller size */
+  height: 10px;
   background-color: black;
   border-radius: 50%;
   position: absolute;

@@ -64,7 +64,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
             <p className="mb-4 pixelated-text">Really, you dont want to go to the more creative part of the page?</p>
             
             <div className="flex space-x-4">
-              <button onClick={handleCancelConfirmation} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Alright, Go with Fun Part
               </button>
               <button onClick={handleRedirectToProfessional} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">

@@ -8,6 +8,7 @@ import Footer from '../funpart/Footer';
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [showGif, setShowGif] = useState(false);
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
@@ -42,17 +43,21 @@ const Home = () => {
     setIsButtonHovered(false);
   };
 
+  const toggleShowGif = (show: boolean) => {
+    setShowGif(show);
+  };
+
   return (
     <div>
       <Head>
         <title>My Portfolio</title>
       </Head>
-      <div id="landing" className="min-h-screen">
+      <div id="landing" className={`min-h-screen ${showGif ? 'hidden' : ''}`}>
         <Landing />
       </div>
       <div
         id="home"
-        className="min-h-screen bg-gray-100 relative flex flex-col justify-center items-center"
+        className={`min-h-screen bg-gray-100 relative flex flex-col justify-center items-center ${showGif ? 'hidden' : ''}`}
         style={{
           backgroundImage: "url('/image/p2.jpg')", // Change to your image path
           backgroundSize: 'cover',
@@ -97,9 +102,10 @@ const Home = () => {
         )}
         <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>
       </div>
-      <Footer />
+      <Footer toggleShowGif={toggleShowGif} />
     </div>
   );
 };
 
 export default Home;
+

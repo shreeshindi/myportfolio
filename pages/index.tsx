@@ -49,7 +49,16 @@ const Home = () => {
       <div id="landing" className="min-h-screen">
         <Landing />
       </div>
-      <div id="home" className="min-h-screen bg-gray-100 relative flex flex-col justify-center items-center">
+      <div
+        id="home"
+        className="min-h-screen bg-gray-100 relative flex flex-col justify-center items-center"
+        style={{
+          backgroundImage: "url('/image/p2.jpg')", // Change to your image path
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-0"></div>
         {!isButtonHovered && (
           <img
             src="/image/cm.png" // Path to the provided image

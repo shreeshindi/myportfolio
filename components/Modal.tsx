@@ -1,21 +1,78 @@
-// components/Modal.tsx
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+const gifs = [
+  'https://media.giphy.com/media/dupS3dOY2Na1BmlmYJ/giphy.gif',
+  'https://media.giphy.com/media/Ni4cpi0uUkd6U/giphy.gif',
+  'https://media.giphy.com/media/3ohfFpHY8mfSqIapuE/giphy.gif',
+  'https://media.giphy.com/media/26vUugZNrrr1aF7qw/giphy.gif',
+];
+
 const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
+  const router = useRouter();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedGif, setSelectedGif] = useState('');
+
+  useEffect(() => {
+    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+    setSelectedGif(randomGif);
+  }, []);
+
+  const handleRedirectToProfessional = () => {
+    router.push('/professional-profile'); // Change this to the route you want to redirect to
+  };
+
+  const handleShowConfirmation = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleCancelConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black opacity-70"></div>
-      <div className="bg-gray-800 text-green-200 p-8 rounded-lg shadow-lg z-10 border-4 border-green-500 pixelated">
-        <h2 className="text-2xl font-bold mb-4 pixelated-text">Welcome!</h2>
-        <p className="mb-4 pixelated-text">This is your pop-up message before the landing page loads.</p>
-        <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">Close</button>
+      <div className="bg-gray-800 text-green-200 p-8 rounded-lg shadow-lg z-10 border-4 border-green-500 pixelated flex flex-col items-center justify-center">
+        {!showConfirmation ? (
+          <>
+            <h2 className="text-2xl font-bold mb-4 pixelated-text">Welcome!</h2>
+            <p className="mb-4 pixelated-text">This is your pop-up message before the landing page loads.</p>
+            <p className="mb-4 pixelated-text">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
+            <div className="flex space-x-4">
+              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+                Fun Portfolio
+              </button>
+              <button onClick={handleShowConfirmation} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
+                Professional Profile
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-2xl font-bold mb-4 pixelated-text">uh..?</h2>
+            <div className="flex justify-center mb-4">
+              <img src={selectedGif} alt="Are you sure?" width="480" height="312" />
+            </div>
+            <p className="mb-4 pixelated-text">Really, you dont want to go to the more creative part of the page?</p>
+            
+            <div className="flex space-x-4">
+              <button onClick={handleCancelConfirmation} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+                Alright, Go with Fun Part
+              </button>
+              <button onClick={handleRedirectToProfessional} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
+                Yes, Go with Professional Part
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

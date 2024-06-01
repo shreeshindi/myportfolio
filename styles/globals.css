@@ -53,7 +53,13 @@ html {
     1px 1px 0 #000;
 }
 
+.pixelated {
+  image-rendering: pixelated;
+}
 
+.pixelated-text {
+  font-family: 'Press Start 2P', cursive;
+}
 
 .scrolldown {
   position: relative;

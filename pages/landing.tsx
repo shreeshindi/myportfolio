@@ -1,3 +1,4 @@
+// pages/landing.tsx
 import Head from 'next/head';
 import { useEffect, useRef } from 'react';
 
@@ -70,6 +71,9 @@ const Landing = () => {
       <Head>
         <title>Shreenidhi</title>
       </Head>
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+        <div className="scrolldown"></div>
+      </div>
       <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
         <br />

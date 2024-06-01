@@ -1,10 +1,16 @@
 // pages/landing.tsx
 import Head from 'next/head';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Modal from '../components/Modal';
 
 const Landing = () => {
   const textRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const [isModalOpen, setModalOpen] = useState(true);
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(() => {
     const handleScrollTrigger = async () => {
@@ -62,32 +68,34 @@ const Landing = () => {
   }, []);
 
   return (
-    <div
-      ref={bgRef}
-      className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16 relative"
-      style={{ backgroundImage: "url('/image/p1.gif')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
-    >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
-      <Head>
-        <title>Shreenidhi</title>
-      </Head>
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-        <div className="scrolldown"></div>
-      </div>
-      <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
-        <br />
-        <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mt-4 text-shadow space-y-6 text-left mx-auto" ref={textRef}>
-          <p className="mb-6">🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.</p>
-          <p className="mb-6">🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.</p>
-          <p className="mb-6">🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too.</p>
-          <p className="mb-6">🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!</p>
+    <>
+      <Modal isOpen={isModalOpen} onClose={closeModal} />
+      <div
+        ref={bgRef}
+        className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16 relative"
+        style={{ backgroundImage: "url('/image/p1.gif')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <Head>
+          <title>Shreenidhi</title>
+        </Head>
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+          <div className="scrolldown"></div>
         </div>
+        <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
+          <br />
+          <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mt-4 text-shadow space-y-6 text-left mx-auto" ref={textRef}>
+            <p className="mb-6">🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.</p>
+            <p className="mb-6">🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.</p>
+            <p className="mb-6">🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too.</p>
+            <p className="mb-6">🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!</p>
+          </div>
+        </div>
+        {/* Adjusting padding to increase the height of the page */}
+        <div style={{ paddingBottom: '40rem' }}></div>
       </div>
-
-      {/* Adjusting padding to increase the height of the page */}
-      <div style={{ paddingBottom: '40rem' }}></div>
-    </div>
+    </>
   );
 };
 

@@ -11,6 +11,9 @@ const gifs = [
   'https://media.giphy.com/media/Ni4cpi0uUkd6U/giphy.gif',
   'https://media.giphy.com/media/3ohfFpHY8mfSqIapuE/giphy.gif',
   'https://media.giphy.com/media/26vUugZNrrr1aF7qw/giphy.gif',
+  'https://media.giphy.com/media/XpuTLtJZM8903cXitm/giphy.gif',
+  'https://media.giphy.com/media/m42kulmpRncAXrHTWO/giphy.gif',
+  'https://media.giphy.com/media/AkAb9pi0dPMqDmJjor/giphy.gif',
 ];
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {

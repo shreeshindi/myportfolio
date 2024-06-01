@@ -1,4 +1,3 @@
-// pages/landing.tsx
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import Modal from '../components/Modal';
@@ -66,6 +65,14 @@ const Landing = () => {
 
     handleScrollTrigger();
   }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isModalOpen]);
 
   return (
     <>

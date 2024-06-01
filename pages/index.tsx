@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Eye from '../components/Eye';
 import { useState, useEffect } from 'react';
 import Landing from './landing';
+import Footer from '../funpart/Footer';
 
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
@@ -96,6 +97,7 @@ const Home = () => {
         )}
         <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>
       </div>
+      <Footer />
     </div>
   );
 };

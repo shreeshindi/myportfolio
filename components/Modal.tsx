@@ -40,13 +40,13 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black opacity-70"></div>
-      <div className="bg-gray-800 text-green-200 p-8 rounded-lg shadow-lg z-10 border-4 border-green-500 pixelated flex flex-col items-center justify-center">
+      <div className="bg-gray-800 text-green-200 p-4 sm:p-8 rounded-lg shadow-lg z-10 border-4 border-green-500 pixelated flex flex-col items-center justify-center w-full max-w-md sm:max-w-lg mx-4 sm:mx-auto">
         {!showConfirmation ? (
           <>
-            <h2 className="text-2xl font-bold mb-4 pixelated-text">Welcome!</h2>
-            <p className="mb-4 pixelated-text">This is your pop-up message before the landing page loads.</p>
-            <p className="mb-4 pixelated-text">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
-            <div className="flex space-x-4">
+            <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">Welcome!</h2>
+            <p className="mb-4 pixelated-text text-center">This is your pop-up message before the landing page loads.</p>
+            <p className="mb-4 pixelated-text text-center">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Fun Portfolio
               </button>
@@ -57,13 +57,12 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-bold mb-4 pixelated-text">uh..?</h2>
+            <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">uh..?</h2>
             <div className="flex justify-center mb-4">
-              <img src={selectedGif} alt="Are you sure?" width="480" height="312" />
+              <img src={selectedGif} alt="Are you sure?" className="w-full h-auto sm:w-96" />
             </div>
-            <p className="mb-4 pixelated-text">Really, you dont want to go to the more creative part of the page?</p>
-            
-            <div className="flex space-x-4">
+            <p className="mb-4 pixelated-text text-center">Really, you dont want to go to the more creative part of the page?</p>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Alright, Go with Fun Part
               </button>

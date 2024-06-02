@@ -1,0 +1,133 @@
+/* /funpart/Footer.module.css */
+.terminalWindow {
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+  }
+  
+  .terminalHeader {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #00ff00;
+  }
+  
+  .terminalButton {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 5px;
+    border-radius: 50%;
+    background-color: #ff5f56;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .terminalButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    display: none;
+  }
+  
+  .terminalButton:nth-child(2) {
+    background-color: #ffbd2e;
+  }
+  
+  .terminalButton:nth-child(3) {
+    background-color: #27c93f;
+  }
+  
+  .terminalButton:hover::after {
+    display: block;
+  }
+  
+  .terminalButton:nth-child(1):hover::after {
+    border-width: 5px 0 5px 10px;
+    border-color: transparent transparent transparent white;
+  }
+  
+  .terminalButton:nth-child(2):hover::after {
+    border-width: 10px 10px 0 0;
+    border-color: white transparent transparent transparent;
+  }
+  
+  .terminalButton:nth-child(3):hover::after {
+    border-width: 10px 0 0 10px;
+    border-color: white transparent transparent transparent;
+  }
+  
+  .terminalContent {
+    padding: 20px;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  .typingEffect {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid rgba(255, 255, 255, 0.75);
+  }
+  
+  .typingEffect::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid rgba(255, 255, 255, 0.75);
+    animation: typing 3s steps(40, end) forwards;
+  }
+  
+  a:hover .typingEffect::before {
+    animation: none;
+  }
+  
+  .link {
+    padding: 0 12px;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popupContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  

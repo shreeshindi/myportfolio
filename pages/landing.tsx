@@ -80,7 +80,7 @@ const Landing = () => {
       <div
         ref={bgRef}
         className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16 relative"
-        style={{ backgroundImage: "url('/image/p1.gif')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+        style={{ backgroundImage: "url('./image/p1.gif')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <Head>

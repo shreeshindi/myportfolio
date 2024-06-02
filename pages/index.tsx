@@ -1,5 +1,7 @@
+
 // pages/index.tsx
 import Head from 'next/head';
+import Image from 'next/image';
 import Eye from '../components/Eye';
 import { useState, useEffect } from 'react';
 import Landing from './landing';
@@ -66,10 +68,13 @@ const Home = () => {
       >
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-0"></div>
         {!isButtonHovered && (
-          <img
+          <Image
             src="/image/cm.png" // Path to the provided image
             alt="Your Image"
             className="absolute bottom-0 left-0 z-10 w-72 h-72" // Increased size
+            layout="fixed"
+            width={288} // 72 * 4
+            height={288} // 72 * 4
             style={{ margin: 0, padding: 0 }}
           />
         )}
@@ -108,4 +113,3 @@ const Home = () => {
 };
 
 export default Home;
-

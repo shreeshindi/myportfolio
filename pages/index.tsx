@@ -61,7 +61,7 @@ const Home = () => {
         id="home"
         className={`min-h-screen bg-gray-100 relative flex flex-col justify-center items-center ${showGif ? 'hidden' : ''}`}
         style={{
-          backgroundImage: "url('/image/p22.jpg')", // Change to your image path
+          backgroundImage: "url('/image/p2.jpg')", // Change to your image path
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

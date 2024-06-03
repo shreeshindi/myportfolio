@@ -98,7 +98,7 @@ const Home = () => {
         {isNearButton && (
           <video
             className="absolute top-0 left-0 w-full h-full object-cover z-0"
-            src="/video/p22oi.mp4"
+            src="/image/p22oi.mp4"
             autoPlay
             loop
             muted

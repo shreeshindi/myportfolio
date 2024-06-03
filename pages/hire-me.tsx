@@ -34,13 +34,13 @@ const HireMe = () => {
         )}
 
         <div className="mt-10 flex flex-col space-y-4">
-          <Link href="/contact" legacyBehavior>
+          {/* <Link href="/contact" legacyBehavior>
             <a className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300">Contact</a>
           </Link>
           <Link href="/work-done" legacyBehavior>
             <a className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300">Work Done</a>
-          </Link>
-          <Link href="/resume.pdf" passHref legacyBehavior>
+          </Link> */}
+          <Link href="/image/best_dev.pdf" passHref legacyBehavior>
             <a className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300" target="_blank" download>Download Resume</a>
           </Link>
         </div>

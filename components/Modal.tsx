@@ -19,6 +19,7 @@ const gifs = [
 const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showUnderConstruction, setShowUnderConstruction] = useState(false);
   const [selectedGif, setSelectedGif] = useState('');
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleRedirectToProfessional = () => {
-    router.push('/professional-profile'); // Change this to the route you want to redirect to
+    setShowUnderConstruction(true);
   };
 
   const handleShowConfirmation = () => {
@@ -59,21 +60,15 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black opacity-70"></div>
       <div className="bg-gray-800 text-green-200 p-4 sm:p-8 rounded-lg shadow-lg z-10 border-4 border-green-500 pixelated flex flex-col items-center justify-center w-full max-w-md sm:max-w-lg mx-4 sm:mx-auto">
-        {!showConfirmation ? (
+        {showUnderConstruction ? (
           <>
-            <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">Welcome!</h2>
-            <p className="mb-4 pixelated-text text-center">This is your pop-up message before the landing page loads.</p>
-            <p className="mb-4 pixelated-text text-center">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
-                Fun Portfolio
-              </button>
-              <button onClick={handleShowConfirmation} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
-                Professional Profile
-              </button>
-            </div>
+            <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">Under Construction</h2>
+            <p className="mb-4 pixelated-text text-center">The professional profile page is still under construction. Please check back later!</p>
+            <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+              Close
+            </button>
           </>
-        ) : (
+        ) : showConfirmation ? (
           <>
             <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">uh..?</h2>
             <div className="flex justify-center mb-4">
@@ -86,6 +81,20 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
               </button>
               <button onClick={handleRedirectToProfessional} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
                 Yes, Go with Professional Part
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">Welcome!</h2>
+            <p className="mb-4 pixelated-text text-center">This is your pop-up message before the landing page loads.</p>
+            <p className="mb-4 pixelated-text text-center">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+                Fun Portfolio
+              </button>
+              <button onClick={handleShowConfirmation} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
+                Professional Profile
               </button>
             </div>
           </>

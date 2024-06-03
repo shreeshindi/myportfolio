@@ -1,4 +1,3 @@
-
 // pages/index.tsx
 import Head from 'next/head';
 import Image from 'next/image';
@@ -96,13 +95,12 @@ const Home = () => {
           Hire me!
         </button>
         {isNearButton && (
-          <video
+          <iframe
             className="absolute top-0 left-0 w-full h-full object-cover z-0"
-            src="/image/p22oi.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
+            src="https://www.youtube.com/embed/urLf8lLOqnQ?autoplay=1&loop=1&playlist=urLf8lLOqnQ"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
           />
         )}
         <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>

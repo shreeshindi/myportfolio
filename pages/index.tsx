@@ -5,11 +5,13 @@ import Eye from '../components/Eye';
 import { useState, useEffect } from 'react';
 import Landing from './landing';
 import Footer from '../funpart/Footer';
+import { useRouter } from 'next/router';
 
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [showGif, setShowGif] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
@@ -46,6 +48,10 @@ const Home = () => {
 
   const toggleShowGif = (show: boolean) => {
     setShowGif(show);
+  };
+
+  const handleHireMeClick = () => {
+    router.push('/hire-me');
   };
 
   return (
@@ -90,6 +96,7 @@ const Home = () => {
           id="bonkers-button"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onClick={handleHireMeClick}
           className={`text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
         >
           Hire me!

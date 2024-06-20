@@ -9,6 +9,12 @@ const Professional: FC = () => {
   const closeModal = () => setIsOpen(false);
 
   return (
+    <>
+    <head>
+        <title>
+        Shreenidhi
+        </title>
+    </head>
     <div className="min-h-screen bg-white flex flex-col items-center px-4" style={{ fontFamily: 'Arial, sans-serif' }}>
       <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
         <div className="flex items-center">
@@ -86,6 +92,7 @@ const Professional: FC = () => {
         </div>
       </Dialog>
     </div>
+    </>
   );
 };
 

@@ -4,6 +4,12 @@ import Link from 'next/link';
 
 const About: FC = () => {
   return (
+    <>
+    <head>
+        <title>
+        Shreenidhi
+        </title>
+    </head>
     <div className="min-h-screen bg-white flex flex-col items-center px-4" style={{ fontFamily: 'Arial, sans-serif' }}>
       <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
         <div className="flex items-center">
@@ -80,6 +86,7 @@ const About: FC = () => {
         <p className="text-gray-600">©2024 Shreenidhi </p>
       </footer>
     </div>
+    </>
   );
 };
 

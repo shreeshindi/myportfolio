@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const About: FC = () => {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center px-4">
+    <div className="min-h-screen bg-white flex flex-col items-center px-4" style={{ fontFamily: 'Arial, sans-serif' }}>
       <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
         <div className="flex items-center">
           <Image src="/image/12.png" alt="Logo" width={40} height={40} className="mr-2" />

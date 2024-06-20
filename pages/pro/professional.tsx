@@ -20,12 +20,12 @@ const Professional: FC = () => {
           <Link href="/pro/professional" legacyBehavior>
             <a className="text-lg text-gray-800 hover:text-gray-600">Home</a>
           </Link>
-          <Link href="/about" legacyBehavior>
+          <Link href="/pro/about" legacyBehavior>
             <a className="text-lg text-gray-800 hover:text-gray-600">About</a>
           </Link>
-          <Link href="/tools" legacyBehavior>
+          {/* <Link href="/tools" legacyBehavior>
             <a className="text-lg text-gray-800 hover:text-gray-600">Tools</a>
-          </Link>
+          </Link> */}
         </nav>
         <button onClick={openModal} className="text-lg text-gray-800 hover:text-gray-600">
           Contact

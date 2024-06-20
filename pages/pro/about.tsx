@@ -8,22 +8,22 @@ const About: FC = () => {
       <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
         <div className="flex items-center">
           <Image src="/image/12.png" alt="Logo" width={40} height={40} className="mr-2" />
-          <span className="text-2xl font-bold text-red-500">shreenidhi</span>
+          <span className="text-2xl font-bold text-red-500">Shreenidhi</span>
         </div>
         <nav className="flex space-x-6">
-          <Link href="/pro/professional" legacyBehavior>
-            <a className="text-lg text-black hover:text-gray-600">Home</a>
-          </Link>
-          <Link href="/pro/about" legacyBehavior>
-            <a className="text-lg text-black hover:text-gray-600">About</a>
-          </Link>
-          {/* <Link href="/tools" legacyBehavior>
-            <a className="text-lg text-black hover:text-gray-600">Tools</a>
-          </Link> */}
+          <div className="flex space-x-4">
+            <Link href="/pro/professional" legacyBehavior>
+              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
+                Home
+              </a>
+            </Link>
+            <Link href="/pro/about" legacyBehavior>
+              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
+                About
+              </a>
+            </Link>
+          </div>
         </nav>
-        {/* <Link href="/contact" legacyBehavior>
-          <a className="text-lg text-black hover:text-gray-600">Contact</a>
-        </Link> */}
       </header>
       <main className="w-full max-w-screen-xl flex flex-col items-center py-6">
         <h1 className="text-3xl font-bold mb-6 text-black">About Me</h1>

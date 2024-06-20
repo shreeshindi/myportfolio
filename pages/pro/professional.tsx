@@ -13,15 +13,21 @@ const Professional: FC = () => {
       <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
         <div className="flex items-center">
           <Image src="/image/12.png" alt="Logo" width={40} height={40} className="mr-2" />
-          <span className="text-2xl font-bold text-red-500">shreenidhi</span>
+          <span className="text-2xl font-bold text-red-500">Shreenidhi</span>
         </div>
         <nav className="flex space-x-6">
-          <Link href="/pro/professional" legacyBehavior>
-            <a className="text-lg text-gray-800 hover:text-gray-600">Home</a>
-          </Link>
-          <Link href="/pro/about" legacyBehavior>
-            <a className="text-lg text-gray-800 hover:text-gray-600">About</a>
-          </Link>
+          <div className="flex space-x-4">
+            <Link href="/pro/professional" legacyBehavior>
+              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
+                Home
+              </a>
+            </Link>
+            <Link href="/pro/about" legacyBehavior>
+              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
+                About
+              </a>
+            </Link>
+          </div>
         </nav>
         <button onClick={openModal} className="text-lg text-gray-800 hover:text-gray-600">
           Contact
@@ -30,8 +36,8 @@ const Professional: FC = () => {
       <main className="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-gray-100 p-4 rounded-lg shadow-md flex flex-col items-center sm:order-2 lg:order-1">
           <Image src="/image/12.png" alt="Profile" width={60} height={60} className="mb-4" />
-          <p className="text-center text-lg font-semibold text-black" >
-            I am <span className="text-red-500">shreenidhi</span>, a backend developer specializing in Spring Boot and Java. I have a passion for creating robust and scalable server-side applications.
+          <p className="text-center text-lg font-semibold text-black">
+            I am <span className="text-red-500">Shreenidhi</span>, a backend developer specializing in Spring Boot and Java. I have a passion for creating robust and scalable server-side applications.
           </p>
         </div>
         <div className="bg-gray-100 p-4 rounded-lg shadow-md sm:order-1 lg:order-2">
@@ -42,9 +48,9 @@ const Professional: FC = () => {
             <Image src="/image/dpdf.png" alt="resume" width={60} height={60} />
           </div>
         </a>
-        <a 
-          href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/" 
-          target="_blank" 
+        <a
+          href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/"
+          target="_blank"
           rel="noopener noreferrer"
           className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center sm:order-4 lg:order-4"
         >

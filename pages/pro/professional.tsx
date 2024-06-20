@@ -22,25 +22,22 @@ const Professional: FC = () => {
           <Link href="/pro/about" legacyBehavior>
             <a className="text-lg text-gray-800 hover:text-gray-600">About</a>
           </Link>
-          {/* <Link href="/tools" legacyBehavior>
-            <a className="text-lg text-gray-800 hover:text-gray-600">Tools</a>
-          </Link> */}
         </nav>
         <button onClick={openModal} className="text-lg text-gray-800 hover:text-gray-600">
           Contact
         </button>
       </header>
       <main className="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md flex flex-col items-center">
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md flex flex-col items-center sm:order-2 lg:order-1">
           <Image src="/image/12.png" alt="Profile" width={60} height={60} className="mb-4" />
           <p className="text-center text-lg font-semibold text-black" >
             I am <span className="text-red-500">shreenidhi</span>, a backend developer specializing in Spring Boot and Java. I have a passion for creating robust and scalable server-side applications.
           </p>
         </div>
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md sm:order-1 lg:order-2">
           <Image src="/image/Capture.png" alt="Map" width={400} height={200} />
         </div>
-        <a href="/image/best_dev.pdf" download>
+        <a href="/image/best_dev.pdf" download className="sm:order-3 lg:order-3">
           <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center">
             <Image src="/image/dpdf.png" alt="resume" width={60} height={60} />
           </div>
@@ -49,12 +46,12 @@ const Professional: FC = () => {
           href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center"
+          className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center sm:order-4 lg:order-4"
         >
           <Image src="/image/linkedin.png" alt="Magic Items" width={60} height={60} />
           <span className="ml-2 text-lg"></span>
         </a>
-        <a href="https://github.com/shreeshindi" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/shreeshindi" target="_blank" rel="noopener noreferrer" className="sm:order-5 lg:order-5">
           <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center">
             <Image src="/image/git.png" alt="git" width={60} height={60} />
             <span className="ml-2 text-lg"></span>
@@ -66,7 +63,7 @@ const Professional: FC = () => {
       </footer>
 
       <Dialog open={isOpen} onClose={closeModal} className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-screen" style={{ fontFamily: 'Arial, sans-serif' }}>
           <div className="fixed inset-0 bg-black opacity-30" onClick={closeModal}></div>
           <div className="bg-white rounded-lg p-6 mx-4 max-w-sm mx-auto z-20">
             <Dialog.Title className="text-lg font-bold">Contact Me</Dialog.Title>

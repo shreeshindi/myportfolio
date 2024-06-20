@@ -31,6 +31,7 @@ const About: FC = () => {
           </div>
         </nav>
       </header>
+      <br></br>
       <main className="w-full max-w-screen-xl flex flex-col items-center py-6">
         <h1 className="text-3xl font-bold mb-6 text-black">About Me</h1>
         <p className="text-lg mb-4 text-black">

@@ -38,7 +38,7 @@ const Professional: FC = () => {
         <button onClick={openModal} className="text-lg text-gray-800 hover:text-gray-600">
           Contact
         </button>
-      </header>
+      </header><br></br>
       <main className="w-full max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-gray-100 p-4 rounded-lg shadow-md flex flex-col items-center sm:order-2 lg:order-1">
           <Image src="/image/12.png" alt="Profile" width={60} height={60} className="mb-4" />

@@ -41,9 +41,9 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-
+//https://robertozaccardi.dev/
   const handleRedirectToProfessional = () => {
-    setShowUnderConstruction(true);
+    router.push('/pro/professional'); // Replace with the path to your professional page
   };
 
   const handleShowConfirmation = () => {
@@ -105,3 +105,4 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
 };
 
 export default Modal;
+

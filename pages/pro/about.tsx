@@ -21,9 +21,9 @@ const About: FC = () => {
             <a className="text-lg text-black hover:text-gray-600">Tools</a>
           </Link> */}
         </nav>
-        <Link href="/contact" legacyBehavior>
+        {/* <Link href="/contact" legacyBehavior>
           <a className="text-lg text-black hover:text-gray-600">Contact</a>
-        </Link>
+        </Link> */}
       </header>
       <main className="w-full max-w-screen-xl flex flex-col items-center py-6">
         <h1 className="text-3xl font-bold mb-6 text-black">About Me</h1>

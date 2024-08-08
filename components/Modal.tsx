@@ -88,7 +88,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
           <>
             <h2 className="text-2xl font-bold mb-4 pixelated-text text-center">Welcome!</h2>
             <p className="mb-4 pixelated-text text-center">This is your pop-up message before the landing page loads.</p>
-            <p className="mb-4 pixelated-text text-center">Would you like to continue with the fun, creative portfolio page filled with humor and personality, or switch to a more straightforward, professional profile page? Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
+            <p className="mb-4 pixelated-text text-center">Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Fun Portfolio

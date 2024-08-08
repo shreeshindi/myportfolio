@@ -47,7 +47,7 @@ const Professional: FC = () => {
           </p>
         </div>
         <div className="bg-gray-100 p-4 rounded-lg shadow-md sm:order-1 lg:order-2">
-          <Image src="/image/Capture.png" alt="Map" width={400} height={200} />
+          <Image src="/image/Capture1.png" alt="Map" width={400} height={200} />
         </div>
         <a href="/image/best_dev.pdf" download className="sm:order-3 lg:order-3">
           <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center">

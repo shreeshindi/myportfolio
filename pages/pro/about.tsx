@@ -76,7 +76,7 @@ const About: FC = () => {
           <li><strong>SmartRoot | Hanriver</strong><br />A scalable solution for farm management, integrating IoT devices and providing real-time data analytics to farmers. Utilized Java Spring Boot for backend services, Docker for containerization.</li>
           <li><strong>MFS Bulk Payment | Kingston Info Solution Services</strong><br />A secure, high-performance bulk payment processing system designed for financial institutions, enabling the handling of large-volume transactions with high reliability and security.</li>
         </ul>
-        <a href="/image/best_dev.pdf" download>
+        <a href="/image/shreenidhi.pdf" download>
           <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center">
             <Image src="/image/dpdf.png" alt="Resume" width={60} height={60} />
             <span className="ml-2 text-lg text-black">Download Resume</span>

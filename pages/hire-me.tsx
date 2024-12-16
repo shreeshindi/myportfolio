@@ -40,7 +40,7 @@ const HireMe = () => {
           <Link href="/work-done" legacyBehavior>
             <a className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300">Work Done</a>
           </Link> */}
-          <Link href="/image/best_dev.pdf" passHref legacyBehavior>
+          <Link href="/image/shreenidhi.pdf" passHref legacyBehavior>
             <a className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300" target="_blank" download>Download Resume</a>
           </Link>
         </div>

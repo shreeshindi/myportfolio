@@ -1,92 +1,354 @@
+// pages/pro/about.tsx
 import { FC } from 'react';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Space_Grotesk } from 'next/font/google';
+
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+});
+
+/** Inline SVGs so there’s no external image loading risk */
+const SpringLogo: FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 256 256" className={className} role="img" aria-label="Spring">
+    <defs>
+      <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0%" stopColor="#6ee7b7" />
+        <stop offset="100%" stopColor="#22c55e" />
+      </linearGradient>
+    </defs>
+    <rect width="256" height="256" rx="56" fill="url(#g1)" />
+    <path
+      fill="#0b4228"
+      d="M204.6 68.9c-7.4 8.9-17.7 14.7-27.8 17.5 2.4-7.8 3.3-16.9-.7-25.3-5.6-11.5-17.4-17.7-29.6-17.7-31.5 0-50.5 28.7-53.7 58.4-1.9 17.3 1 30.6 9.7 40.7 7.4 8.5 17.8 13.3 29.9 14.3 18.6 1.6 38.8-6.8 54.1-20.7 12.5-11.4 22.5-26.6 27.1-43.2 1.5-5.5-2.9-10.7-9-9.3zM109 168.2c-9.4 0-18.1-2.7-25.4-7.8-10.2-7.2-16-18.1-17.1-31.7-.9-10.9 1.1-22.8 5.6-34.1-19.7 9.6-33.9 30-33.9 54.1 0 33 26.8 59.8 59.8 59.8 22.4 0 41.9-12.3 52.1-30.5-12.5 6.4-26.3 10.2-41.1 10.2z"
+    />
+  </svg>
+);
+
+const JavaLogo: FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 256 256" className={className} role="img" aria-label="Java">
+    <defs>
+      <linearGradient id="j1" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0%" stopColor="#93c5fd" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+    <rect width="256" height="256" rx="56" fill="url(#j1)" />
+    <g fill="#0b1e36">
+      <path d="M141 58c0 14-22 22-22 34 0 9 11 14 11 14s-20-5-20-21c0-16 22-22 22-34 0-7-4-12-4-12s13 6 13 19z"/>
+      <path d="M96 156c15 7 53 7 68 0 0 0 3 3 3 6 0 9-28 14-37 14s-37-5-37-14c0-3 3-6 3-6z"/>
+      <path d="M97 139c17 8 49 8 66 0 0 0 3 2 3 6 0 9-25 13-36 13s-36-4-36-13c0-4 3-6 3-6z"/>
+      <path d="M97 122c17 8 49 8 66 0 0 0 3 2 3 6 0 9-25 13-36 13s-36-4-36-13c0-4 3-6 3-6z"/>
+    </g>
+  </svg>
+);
+
+const LogoGrid: FC = () => (
+  <div className="grid grid-cols-2 gap-4">
+    {[
+      { name: 'Spring Boot', node: <SpringLogo className="h-20 w-auto" /> },
+      { name: 'Java', node: <JavaLogo className="h-20 w-auto" /> },
+    ].map((item, idx) => (
+      <div
+        key={idx}
+        className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl"
+      >
+        <div
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{
+            background:
+              'radial-gradient(300px 200px at 30% 10%, rgba(255,255,255,0.18), transparent 40%)',
+            mixBlendMode: 'screen',
+          }}
+        />
+        <div className="pointer-events-none absolute -left-1/3 top-0 h-full w-1/3 -skew-x-12 bg-white/10 opacity-0 blur-sm transition-all duration-700 group-hover:left-2/3 group-hover:opacity-70" />
+        <div className="flex h-28 items-center justify-center">
+          <div className="animate-[floaty_6s_ease-in-out_infinite]">{item.node}</div>
+        </div>
+      </div>
+    ))}
+    <style jsx global>{`
+      @keyframes floaty {
+        0% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-6px) scale(1.02); }
+        100% { transform: translateY(0) scale(1); }
+      }
+    `}</style>
+  </div>
+);
 
 const About: FC = () => {
   return (
     <>
-    <head>
-        <title>
-        Shreenidhi
-        </title>
-    </head>
-    <div className="min-h-screen bg-white flex flex-col items-center px-4" style={{ fontFamily: 'Arial, sans-serif' }}>
-      <header className="w-full max-w-screen-xl flex justify-between items-center py-6">
-        <div className="flex items-center">
-          <Image src="/image/12.png" alt="Logo" width={40} height={40} className="mr-2" />
-          <span className="text-2xl font-bold text-red-500">Shreenidhi</span>
+      <Head>
+        <title>About — Shreenidhi</title>
+        <meta
+          name="description"
+          content="About Shreenidhi M C — Backend Software Engineer (Java, Spring Boot). Skills, education, experience, and projects."
+        />
+      </Head>
+
+      <div className={`${grotesk.className} relative min-h-screen overflow-hidden text-white`}>
+        {/* Background */}
+        <div className="pointer-events-none absolute inset-0 -z-20">
+          <div className="absolute -top-28 -left-28 h-[26rem] w-[26rem] rounded-full opacity-40 blur-3xl animate-[blob_18s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#60a5fa,_transparent)]" />
+          <div className="absolute -bottom-40 -right-36 h-[30rem] w-[30rem] rounded-full opacity-40 blur-3xl animate-[blob_22s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#a855f7,_transparent)]" />
+          <div className="absolute top-1/3 left-1/2 h-[22rem] w-[22rem] -translate-x-1/2 rounded-full opacity-30 blur-3xl animate-[blob_26s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#22d3ee,_transparent)]" />
+          <div
+            className="absolute inset-0 opacity-[0.10]"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(255,255,255,.18) 1px, transparent 1px),' +
+                'linear-gradient(to bottom, rgba(255,255,255,.18) 1px, transparent 1px)',
+              backgroundSize: '32px 32px',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-900/70 to-black/85" />
         </div>
-        <nav className="flex space-x-6">
-          <div className="flex space-x-4">
-            <Link href="/pro/professional" legacyBehavior>
-              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
-                Home
-              </a>
-            </Link>
-            <Link href="/pro/about" legacyBehavior>
-              <a className="text-lg text-gray-800 hover:text-red-500 rounded-full border-2 border-gray-800 p-2 hover:bg-gray-200 transition-transform transform hover:scale-105 duration-300">
-                About
-              </a>
-            </Link>
+
+        {/* Mouse-follow glare */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              'radial-gradient(600px 600px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.18), transparent 45%)',
+            mixBlendMode: 'screen',
+          }}
+        />
+
+        {/* Header */}
+        <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
+          <Link href="/pro/professional" className="flex items-center gap-3">
+            <Image src="/image/12.png" alt="Logo" width={40} height={40} priority />
+            <span className="text-xl font-semibold tracking-wide">Shreenidhi</span>
+          </Link>
+          <nav className="hidden gap-6 md:flex">
+            <Link href="/pro/professional" className="hover:opacity-80">Home</Link>
+            <Link href="/pro/about" className="hover:opacity-80">About</Link>
+            <a href="mailto:shreenidhi.mc.vernekar@gmail.com" className="hover:opacity-80">Contact</a>
+          </nav>
+          <a
+            href="/image/shreenidhi.pdf"
+            download
+            className="rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 hover:bg-white/20 md:hidden"
+          >
+            Resume
+          </a>
+        </header>
+
+        {/* Intro + Logo Grid */}
+        <section className="mx-auto w-full max-w-7xl px-6 pb-8 pt-2 md:pt-8">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <div className="grid items-center gap-10 md:grid-cols-2">
+              <div>
+                <h1 className="text-4xl font-bold leading-tight md:text-5xl">About Me</h1>
+                <p className="mt-4 max-w-prose text-white/85">
+                  I’m <span className="font-semibold text-white">Shreenidhi M C</span>, a backend engineer focused on
+                  <span className="mx-1 rounded-lg border border-white/15 bg-white/10 px-2 py-0.5">Java</span>
+                  and
+                  <span className="mx-1 rounded-lg border border-white/15 bg-white/10 px-2 py-0.5">Spring Boot</span>.
+                  I care about clean API design, security that’s actually enforced, and apps that don’t fall over on a Monday morning.
+                  Dockerized, observable, and production-minded from day one.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {[
+                    'Java', 'Spring Boot', 'Spring Security', 'REST APIs',
+                    'JPA/Hibernate', 'PostgreSQL', 'MySQL', 'MongoDB',
+                    'Docker', 'CI/CD', 'Caching', 'Resilience'
+                  ].map((s) => (
+                    <span key={s} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-white/80">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Two-logo grid (unbreakable, inline SVGs) */}
+              <LogoGrid />
+            </div>
           </div>
-        </nav>
-      </header>
-      <br></br>
-      <main className="w-full max-w-screen-xl flex flex-col items-center py-6">
-        <h1 className="text-3xl font-bold mb-6 text-black">About Me</h1>
-        <p className="text-lg mb-4 text-black">
-          I am <span className="text-red-500">Shreenidhi M C</span>, a dynamic and results-oriented Software Engineer with over 4 years of experience in developing robust code for high-volume businesses. I specialize in Java and Spring Boot, with a proven track record in enhancing existing software systems and developing new solutions to drive business success. I am eager to bring top-class backend development and problem-solving skills to a forward-thinking company in the technology sector.
-        </p>
-        <h2 className="text-2xl font-bold mt-6 mb-2 text-black">Skills</h2>
-        <ul className="list-disc list-inside text-lg mb-4 text-black">
-          <li>Languages: Java, Python</li>
-          <li>Frameworks/Technologies: Spring Boot, Spring MVC, Hibernate, Spring Security, Servlets, JPA, FastAPI</li>
-          <li>Databases: MySQL, PostgreSQL, MongoDB, RDBMS (MySQL/Postgres/Oracle), NoSQL</li>
-          <li>Tools & Build Systems: Maven, Gradle, Docker, Git</li>
-          <li>Concepts: Microservices Architecture, RESTful APIs, CI/CD, Performance Optimization, Caching, Application Resiliency, Security</li>
-        </ul>
-        <h2 className="text-2xl font-bold mt-6 mb-2 text-black">Education</h2>
-        <ul className="list-disc list-inside text-lg mb-4 text-black">
-          <li>Bachelor of Engineering in Computer Science, Visvesvaraya Technological University, 2020</li>
-          <li>Diploma in Computer Science, PES University, 2016</li>
-        </ul>
-        <h2 className="text-2xl font-bold mt-6 mb-2 text-black">Work Experience</h2>
-        <p className="text-lg mb-4 text-black">
-          <strong>Software Engineer | Hanriver, Kolkata</strong><br />
-          May 2023 - Present
-          <ul className="list-disc list-inside text-lg mb-4 text-black">
-            <li>Lead developer on the SSO SmartFarm and SmartRoot projects, utilizing Spring Boot, Java, Docker, PostgreSQL, and MySQL to create scalable, efficient backend solutions.</li>
-            <li>Implemented robust security measures and authentication processes using Spring Security, significantly reducing vulnerabilities.</li>
-            <li>Facilitated the containerization of applications using Docker, improving deployment efficiency and environment consistency across development, testing, and production.</li>
-            <li>Conducted performance tuning and optimization of backend services, leading to a 20% increase in application response times.</li>
-          </ul>
-        </p>
-        <p className="text-lg mb-4 text-black">
-          <strong>Backend Developer | Kingston Info Solution Services</strong><br />
-          April 2020 - April 2023
-          <ul className="list-disc list-inside text-lg mb-4 text-black">
-            <li>Developed and maintained the MFS Bulk Payment system, a critical infrastructure project that handled secure, high-volume transactions using Java, Spring Boot, and Hibernate.</li>
-            <li>Applied best practices in code quality and maintainability, incorporating Log4J and Spring AOP for efficient logging and error handling.</li>
-            <li>Collaborated with cross-functional teams to define and implement new features, enhancing the overall functionality and user experience of the system.</li>
-          </ul>
-        </p>
-        <h2 className="text-2xl font-bold mt-6 mb-2 text-black">Projects</h2>
-        <ul className="list-disc list-inside text-lg mb-4 text-black">
-          <li><strong>SmartFarm | Hanriver</strong><br />Developed a routing and task management platform for smart farms, focusing on optimizing schedules for farming services. The project was built using Spring Boot and leveraged monolithic architecture to ensure scalability and resilience.</li>
-          <li><strong>SmartRoot | Hanriver</strong><br />A scalable solution for farm management, integrating IoT devices and providing real-time data analytics to farmers. Utilized Java Spring Boot for backend services, Docker for containerization.</li>
-          <li><strong>MFS Bulk Payment | Kingston Info Solution Services</strong><br />A secure, high-performance bulk payment processing system designed for financial institutions, enabling the handling of large-volume transactions with high reliability and security.</li>
-        </ul>
-        <a href="/image/shreenidhi.pdf" download>
-          <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center justify-center">
-            <Image src="/image/dpdf.png" alt="Resume" width={60} height={60} />
-            <span className="ml-2 text-lg text-black">Download Resume</span>
+        </section>
+
+        {/* Skills */}
+        <section className="mx-auto w-full max-w-7xl px-6 py-6">
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <h2 className="text-xl font-semibold">Languages</h2>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-white/80">
+                <li>Java</li>
+                <li>Python</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <h2 className="text-xl font-semibold">Frameworks & Tech</h2>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-white/80">
+                <li>Spring Boot, Spring MVC, Spring Security, JPA/Hibernate</li>
+                <li>Servlets, RESTful APIs</li>
+                <li>FastAPI</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <h2 className="text-xl font-semibold">Databases & Tools</h2>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-white/80">
+                <li>PostgreSQL, MySQL, MongoDB</li>
+                <li>Maven, Gradle, Docker, Git</li>
+              </ul>
+            </div>
           </div>
-        </a>
-      </main>
-      <footer className="w-full max-w-screen-xl flex justify-center py-6">
-        <p className="text-gray-600">©2024 Shreenidhi </p>
-      </footer>
-    </div>
+        </section>
+
+        {/* Education */}
+        <section className="mx-auto w-full max-w-7xl px-6 py-6">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+            <h2 className="text-2xl font-bold">Education</h2>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <h3 className="text-lg font-semibold">B.E. in Computer Science</h3>
+                <p className="text-white/80">Visvesvaraya Technological University, 2020</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <h3 className="text-lg font-semibold">Diploma in Computer Science</h3>
+                <p className="text-white/80">PES University, 2016</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Experience */}
+        <section className="mx-auto w-full max-w-7xl px-6 py-6">
+          <h2 className="text-2xl font-bold">Work Experience</h2>
+          <div className="mt-6 space-y-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Software Engineer — Hanriver, Kolkata</h3>
+                  <p className="text-white/70">May 2023 – Present</p>
+                </div>
+                <div className="text-white/80">Java • Spring Boot • Docker • PostgreSQL • MySQL</div>
+              </div>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
+                <li>Lead developer on SmartFarm & SmartRoot; shipped scalable, secure backend services.</li>
+                <li>Hardened auth with Spring Security; implemented session/JWT flows and strict policies.</li>
+                <li>~20% faster responses via query tuning, indices, and pragmatic caching.</li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Backend Developer — Kingston Info Solution Services</h3>
+                  <p className="text-white/70">Apr 2020 – Apr 2023</p>
+                </div>
+                <div className="text-white/80">Java • Spring Boot • Hibernate • Payments</div>
+              </div>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
+                <li>Built the MFS Bulk Payment system for secure, high-volume transactions.</li>
+                <li>Structured logging (AOP + Log4J) for traceability and faster incident response.</li>
+                <li>Cross-team collaboration to deliver robust API contracts and stable releases.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Projects */}
+        <section className="mx-auto w-full max-w-7xl px-6 py-6">
+          <h2 className="text-2xl font-bold">Projects</h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                name: 'SmartFarm (Hanriver)',
+                desc: 'Routing & task management platform for farm services. Strong scheduling & reliability focus.',
+                stack: ['Spring Boot', 'PostgreSQL', 'Docker'],
+              },
+              {
+                name: 'SmartRoot (Hanriver)',
+                desc: 'Farm management with IoT ingestion and real-time insights dashboards.',
+                stack: ['Java', 'Spring Boot', 'Containers'],
+              },
+              {
+                name: 'MFS Bulk Payment',
+                desc: 'High-performance, secure payment processing for financial institutions.',
+                stack: ['Spring Boot', 'Hibernate', 'MySQL'],
+              },
+            ].map((p) => (
+              <div key={p.name} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+                <h3 className="text-lg font-semibold">{p.name}</h3>
+                <p className="mt-2 text-white/80">{p.desc}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {p.stack.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/80"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="mx-auto w-full max-w-7xl px-6 py-10">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur-xl md:flex-row md:text-left">
+            <p className="text-white/80">© {new Date().getFullYear()} Shreenidhi</p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="/image/shreenidhi.pdf"
+                download
+                className="rounded-lg bg-white px-4 py-2 text-black hover:opacity-90"
+              >
+                Download Resume
+              </a>
+              <a
+                href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://github.com/shreeshindi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      {/* Global animations + mouse tracking for glare */}
+      <style jsx global>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(20px, -30px) scale(1.04); }
+          66% { transform: translate(-25px, 10px) scale(0.98); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+      `}</style>
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              window.addEventListener('mousemove', function(e){
+                document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+                document.documentElement.style.setProperty('--my', e.clientY + 'px');
+              });
+            })();
+          `,
+        }}
+      />
     </>
   );
 };

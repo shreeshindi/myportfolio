@@ -1,9 +1,8 @@
 // pages/pro/professional.tsx
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Dialog } from '@headlessui/react';
 import { Space_Grotesk } from 'next/font/google';
 
 const grotesk = Space_Grotesk({
@@ -29,15 +28,11 @@ const IconGitHub: FC<{ className?: string }> = ({ className }) => (
 );
 
 const Professional: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Mouse-follow glare spotlight
+  // mouse-follow glare spotlight
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
-      const x = e.clientX;
-      const y = e.clientY;
-      document.documentElement.style.setProperty('--mx', `${x}px`);
-      document.documentElement.style.setProperty('--my', `${y}px`);
+      document.documentElement.style.setProperty('--mx', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--my', `${e.clientY}px`);
     };
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
@@ -51,13 +46,11 @@ const Professional: FC = () => {
       </Head>
 
       <div className={`${grotesk.className} relative min-h-screen overflow-hidden text-white`}>
-        {/* Layered Background: animated blobs + grid + gradient + mouse-follow glare */}
+        {/* Background: animated blobs + grid + tint */}
         <div className="pointer-events-none absolute inset-0 -z-20">
-          {/* Animated blobs */}
           <div className="absolute -top-28 -left-28 h-[28rem] w-[28rem] rounded-full opacity-40 blur-3xl animate-[blob_18s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#60a5fa,_transparent)]" />
           <div className="absolute -bottom-40 -right-36 h-[32rem] w-[32rem] rounded-full opacity-40 blur-3xl animate-[blob_22s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#a855f7,_transparent)]" />
           <div className="absolute top-1/3 left-1/2 h-[22rem] w-[22rem] -translate-x-1/2 rounded-full opacity-30 blur-3xl animate-[blob_26s_ease-in-out_infinite] bg-[radial-gradient(closest-side,_#22d3ee,_transparent)]" />
-          {/* Subtle grid */}
           <div
             className="absolute inset-0 opacity-[0.10]"
             style={{
@@ -67,11 +60,10 @@ const Professional: FC = () => {
               backgroundSize: '32px 32px',
             }}
           />
-          {/* Vertical gradient tint */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-900/70 to-black/85" />
         </div>
 
-        {/* Mouse-follow glare layer */}
+        {/* Mouse-follow glare */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10"
@@ -91,14 +83,8 @@ const Professional: FC = () => {
           <nav className="hidden gap-6 md:flex">
             <Link href="/pro/professional" className="hover:opacity-80">Home</Link>
             <Link href="/pro/about" className="hover:opacity-80">About</Link>
-            <button onClick={() => setIsOpen(true)} className="hover:opacity-80">Contact</button>
+            {/* Contact removed */}
           </nav>
-          <button
-            onClick={() => setIsOpen(true)}
-            className="md:hidden rounded-lg border border-white/20 px-3 py-1.5 hover:bg-white/10"
-          >
-            Contact
-          </button>
         </header>
 
         {/* Hero */}
@@ -161,7 +147,6 @@ const Professional: FC = () => {
               </div>
 
               <div className="relative">
-                {/* Glare ring behind image */}
                 <div className="absolute -inset-6 -z-10 rounded-3xl opacity-50 blur-2xl"
                      style={{ background: 'conic-gradient(from 180deg at 50% 50%, #22d3ee, #a855f7, #60a5fa, #22d3ee)' }} />
                 <Image
@@ -293,38 +278,7 @@ const Professional: FC = () => {
         </footer>
       </div>
 
-      {/* Contact Modal */}
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 z-50">
-        <div className="flex min-h-screen items-center justify-center p-4">
-          <Dialog.Overlay className="fixed inset-0 bg-black/70" />
-          <div className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl">
-            <Dialog.Title className="text-xl font-semibold">Contact Me</Dialog.Title>
-            <Dialog.Description className="mt-2 text-white/80">
-              I usually respond within 24 hours.
-            </Dialog.Description>
-            <div className="mt-4 space-y-3">
-              <a href="mailto:shreenidhi.mc.vernekar@gmail.com" className="block rounded-lg bg-white px-4 py-2 text-center font-medium text-black hover:opacity-90">
-                shreenidhi.mc.vernekar@gmail.com
-              </a>
-              <a
-                href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-center hover:bg-white/20"
-              >
-                Message on LinkedIn
-              </a>
-            </div>
-            <div className="mt-6 text-right">
-              <button onClick={() => setIsOpen(false)} className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </Dialog>
-
-      {/* Extra CSS for animations & glare (scoped global so Tailwind config need not change) */}
+      {/* Extra CSS for animations */}
       <style jsx global>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }

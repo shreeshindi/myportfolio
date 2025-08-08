@@ -129,7 +129,7 @@ const About: FC = () => {
           <nav className="hidden gap-6 md:flex">
             <Link href="/pro/professional" className="hover:opacity-80">Home</Link>
             <Link href="/pro/about" className="hover:opacity-80">About</Link>
-            <a href="mailto:shreenidhi.mc.vernekar@gmail.com" className="hover:opacity-80">Contact</a>
+            {/* Contact removed */}
           </nav>
           <a
             href="/image/shreenidhi.pdf"
@@ -168,7 +168,7 @@ const About: FC = () => {
                 </div>
               </div>
 
-              {/* Two-logo grid (unbreakable, inline SVGs) */}
+              {/* Two-logo grid (inline SVGs, no external fetch) */}
               <LogoGrid />
             </div>
           </div>

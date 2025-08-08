@@ -61,7 +61,7 @@ const Footer: FC<{ toggleShowGif: (show: boolean) => void }> = ({ toggleShowGif 
           </a>
         </div>
         <div className="text-green-400">
-          &copy; 2024
+          &copy; 2025
         </div>
       </div>
       {showGif && (

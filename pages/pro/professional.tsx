@@ -71,7 +71,7 @@ const Professional: FC = () => {
         </a>
       </main>
       <footer className="w-full max-w-screen-xl flex justify-center py-6">
-        <p className="text-gray-600">©2024 Shreenidhi </p>
+        <p className="text-gray-600">©2025 Shreenidhi </p>
       </footer>
 
       <Dialog open={isOpen} onClose={closeModal} className="fixed z-10 inset-0 overflow-y-auto">
@@ -81,7 +81,7 @@ const Professional: FC = () => {
             <Dialog.Title className="text-lg font-bold">Contact Me</Dialog.Title>
             <Dialog.Description className="mt-2">
               You can reach me at: <br />
-              <a href="mailto:connect@mcshreenidhi.in" className="text-blue-600 underline">connect@mcshreenidhi.in</a>
+              <a href="mailto:shreenidhi.mc.vernekar@gmail.com" className="text-blue-600 underline">shreenidhi.mc.vernekar@gmail.com</a>
             </Dialog.Description>
             <div className="mt-4">
               <button onClick={closeModal} className="bg-red-500 text-white py-2 px-4 rounded">

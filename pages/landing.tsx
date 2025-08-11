@@ -7,8 +7,8 @@ import Modal from '../components/Modal';
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
 
-// NEW: mobile peekers
-import MobilePeekers from '@/components/MobilePeekers';
+// If you want mobile peekers later, import and render them here
+// import MobilePeekers from '@/components/MobilePeekers';
 
 function useIsMobileOrTablet(): boolean {
   const [isMob, setIsMob] = useState(false);
@@ -108,10 +108,11 @@ const Landing = () => {
     <div className={cursorStyles.scope}>
       <ServerCursor />
 
-      {/* MOBILE/TABLET ONLY: Peekers */}
-      
+      {/* MOBILE/TABLET ONLY: Peekers (left empty by your last code) */}
+      {/* {isMobile && <MobilePeekers images={[...]} fallback="/image/shin.png" />} */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal} />
+
       <div
         ref={bgRef}
         className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16 relative"
@@ -122,7 +123,9 @@ const Landing = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        {/* darker overlay; pointer-events none so it never blocks touches */}
+        <div className="absolute inset-0 bg-black/60 pointer-events-none"></div>
+
         <Head>
           <title>Shreenidhi</title>
         </Head>
@@ -131,7 +134,8 @@ const Landing = () => {
           <div className="scrolldown"></div>
         </div>
 
-        <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10">
+        {/* Force white text on top of dark bg for ALL devices */}
+        <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10 text-white">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">
             Are you looking for a good backend developer?
           </h1>

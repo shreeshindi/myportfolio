@@ -7,15 +7,50 @@ import Landing from './landing';
 import Footer from '../funpart/Footer';
 import { useRouter } from 'next/router';
 
-// Cursor imports (scoped to this page)
+// Cursor (scoped)
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
+
+// NEW: mobile peekers
+import MobilePeekers from '@/components/MobilePeekers';
+
+function useIsMobileOrTablet(): boolean {
+  const [isMob, setIsMob] = useState(false);
+  useEffect(() => {
+    const q1 = window.matchMedia('(pointer: coarse)');
+    const q2 = window.matchMedia('(max-width: 1024px)');
+
+    const update = () => setIsMob(q1.matches || q2.matches);
+    update();
+
+    const onChange = () => update();
+
+    // Safari fallback
+    if ((q1 as any).addEventListener) {
+      q1.addEventListener('change', onChange);
+      q2.addEventListener('change', onChange);
+      return () => {
+        q1.removeEventListener('change', onChange);
+        q2.removeEventListener('change', onChange);
+      };
+    } else {
+      q1.addListener(onChange);
+      q2.addListener(onChange);
+      return () => {
+        q1.removeListener(onChange);
+        q2.removeListener(onChange);
+      };
+    }
+  }, []);
+  return isMob;
+}
 
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [showGif, setShowGif] = useState(false);
   const router = useRouter();
+  const isMobile = useIsMobileOrTablet();
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
@@ -34,11 +69,11 @@ const Home = () => {
     };
 
     document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove);
+    document.addEventListener('touchmove', handleMove, { passive: true } as any);
 
     return () => {
       document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('touchmove', handleMove);
+      document.removeEventListener('touchmove', handleMove as any);
     };
   }, []);
 
@@ -48,9 +83,8 @@ const Home = () => {
   const handleHireMeClick = () => router.push('/hire-me');
 
   return (
-    // SCOPE the custom cursor to this page only
+    // Cursor scope only for this page
     <div className={cursorStyles.scope}>
-      {/* Cursor overlay (singleton guarded) */}
       <ServerCursor />
 
       <Head>
@@ -72,26 +106,43 @@ const Home = () => {
       >
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-0"></div>
 
-        {!isButtonHovered && (
-          <Image
-            src="/image/cm.png"
-            alt="Your Image"
-            className="absolute bottom-0 left-0 z-10 w-72 h-72"
-            width={288}
-            height={288}
-            style={{ margin: 0, padding: 0 }}
-          />
+        {/* DESKTOP ONLY: PNG + Eyes */}
+        {!isMobile && !isButtonHovered && (
+          <>
+            <Image
+              src="/image/cm.png"
+              alt="Your Image"
+              className="absolute bottom-0 left-0 z-10 w-72 h-72"
+              width={288}
+              height={288}
+              style={{ margin: 0, padding: 0 }}
+            />
+            <div
+              className="absolute bottom-0 left-0 z-20 flex space-x-4"
+              style={{ transform: 'translate(130px, -170px)' }}
+            >
+              <Eye />
+              <Eye />
+            </div>
+          </>
         )}
 
-        {!isButtonHovered && (
-          <div
-            className="absolute bottom-0 left-0 z-20 flex space-x-4"
-            style={{ transform: 'translate(130px, -170px)' }}
-          >
-            <Eye />
-            <Eye />
-          </div>
-        )}
+        {/* MOBILE/TABLET ONLY: Peekers that slide in/out on scroll */}
+        {isMobile && (
+  <MobilePeekers
+    images={[
+      "/image/onep.png",
+      "/image/shin.png",
+      "/image/bean.png",
+      "/image/inos.png",
+      "/image/batm.png",
+      // add as many as you want; picked at random each peek
+    ]}
+    fallback="/image/shin.png"
+    peekDurationMs={1200}          // optional tune
+    scrollSpeedThreshold={0.22}    // optional tune
+  />
+)}
 
         <div className="flex justify-center items-center space-x-4 relative z-10 mb-4" />
 

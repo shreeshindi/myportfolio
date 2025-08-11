@@ -93,11 +93,15 @@ const Landing = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">Are you looking for a good backend developer?</h1>
           <br />
           <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mt-4 text-shadow space-y-6 text-left mx-auto" ref={textRef}>
-            <p className="mb-6">🎩 Allow me to introduce myself – Im Shreenidhi, the wizard behind the curtain, the Gandalf of code, if you will.</p>
-            <p className="mb-6">🔧 Whether its <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, or <span className="font-bold">FastAPI</span>, Ive tamed them all. Think of me as the Dwight Schrute of backend development – except, you know, way cooler.</p>
-            <p className="mb-6">🎉 When it comes to making your server-side dreams come true, Im like the Sheldon Cooper of clean, efficient code. And yes, Im fun at parties too.</p>
-            <p className="mb-6">🚀 Why settle for average when you can have the Jim Halpert of backend developers? Let’s create something so good, even Michael Scott would call it a “win-win-win situation”!</p>
-          </div>
+  <p className="mb-6">🎩 Sup. I’m Shreenidhi — I build backends that don’t break, cry, or mysteriously vanish at 3AM.</p>
+  
+  <p className="mb-6">🔧 I play around with <span className="font-bold">Spring Boot</span>, <span className="font-bold">Spring Security</span>, <span className="font-bold">Django</span>, and <span className="font-bold">FastAPI</span> like they’re LEGO sets — except these LEGO sets run your business and don’t hurt when you step on them.</p>
+  
+  <p className="mb-6">🎉 My code is clean, fast, and built to last. No spaghetti, no mystery bugs, no “it works on my machine” nonsense.</p>
+  
+  <p className="mb-6">🚀 You bring the idea, I’ll make sure it runs smooth, scales well, and stays solid long after launch.</p>
+</div>
+
         </div>
         {/* Adjusting padding to increase the height of the page */}
         <div style={{ paddingBottom: '40rem' }}></div>

@@ -1,9 +1,10 @@
 // pages/pro/professional.tsx
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Space_Grotesk } from 'next/font/google';
+import { useRouter } from 'next/router';
 
 const grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -27,8 +28,27 @@ const IconGitHub: FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+function isMobileOrTablet(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(max-width: 1024px)').matches
+  );
+}
+
+function isInteractive(el: EventTarget | null): boolean {
+  if (!(el instanceof Element)) return false;
+  const tag = el.tagName?.toLowerCase();
+  if (['a','button','input','textarea','select','label','iframe','video','canvas'].includes(tag)) return true;
+  if ((el as HTMLElement).isContentEditable) return true;
+  if (el.closest('[data-no-swipe="true"]')) return true;
+  return false;
+}
+
 const Professional: FC = () => {
-  // mouse-follow glare spotlight
+  const router = useRouter();
+
+  // mouse-follow glare spotlight (desktop nicety)
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
       document.documentElement.style.setProperty('--mx', `${e.clientX}px`);
@@ -37,6 +57,65 @@ const Professional: FC = () => {
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
   }, []);
+
+  // ===== Mobile: swipe RIGHT (left -> right) to go back to Fun on home (#fun) =====
+  useEffect(() => {
+    if (!isMobileOrTablet()) return;
+
+    const MIN_DISTANCE = 80;      // px
+    const AXIS_DOMINANCE = 1.2;   // x must dominate y
+    const MAX_DURATION_MS = 1200; // gesture speed cap
+    const LEFT_EDGE_MAX = Math.min(100, (typeof window !== 'undefined' ? window.innerWidth : 360) * 0.15);
+
+    const startX = { current: 0 };
+    const startY = { current: 0 };
+    const startTime = { current: 0 };
+    const tracking = { current: false };
+    const startTarget = { current: null as EventTarget | null };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const t = e.touches[0];
+      startX.current = t.clientX;
+      startY.current = t.clientY;
+      startTime.current = performance.now();
+      startTarget.current = e.target;
+      tracking.current = true;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!tracking.current) return;
+      tracking.current = false;
+
+      if (isInteractive(startTarget.current)) return;
+
+      const duration = performance.now() - startTime.current;
+      if (duration > MAX_DURATION_MS) return;
+
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX.current;
+      const dy = t.clientY - startY.current;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      // Require starting near the LEFT edge to reduce accidental triggers
+      if (startX.current > LEFT_EDGE_MAX) return;
+
+      const isRight = dx > MIN_DISTANCE && absDx > absDy * AXIS_DOMINANCE;
+      if (isRight) {
+        // Navigate to home Fun section (overlay on home will still show as per your spec)
+        router.push('/#fun');
+      }
+    };
+
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart as any);
+      window.removeEventListener('touchend', onTouchEnd as any);
+    };
+  }, [router]);
 
   return (
     <>
@@ -181,7 +260,7 @@ const Professional: FC = () => {
           </div>
         </section>
 
-        {/* Experience (updated) */}
+        {/* Experience */}
         <section className="mx-auto w-full max-w-7xl px-6 py-8">
           <h2 className="text-2xl font-bold">Experience</h2>
           <div className="mt-6 space-y-6">
@@ -232,7 +311,7 @@ const Professional: FC = () => {
           </div>
         </section>
 
-        {/* Projects (updated) */}
+        {/* Projects */}
         <section className="mx-auto w-full max-w-7xl px-6 pb-10">
           <h2 className="text-2xl font-bold">Projects</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -305,6 +384,22 @@ const Professional: FC = () => {
             </div>
           </div>
         </footer>
+
+        {/* MOBILE-ONLY hint: Swipe → Fun */}
+        <div className="fixed bottom-4 left-4 right-4 z-20 md:hidden">
+          <div className="mx-auto w-full max-w-sm rounded-xl border border-white/15 bg-black/40 px-4 py-3 backdrop-blur-md text-white/90 flex items-center justify-between">
+            <span className="text-sm">Swipe right for <span className="font-semibold">Fun</span></span>
+            <svg
+              className="h-6 w-6 animate-nudge-right"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* Extra CSS for animations */}
@@ -315,6 +410,12 @@ const Professional: FC = () => {
           66% { transform: translate(-25px, 10px) scale(0.98); }
           100% { transform: translate(0px, 0px) scale(1); }
         }
+        @keyframes nudge-right {
+          0%   { transform: translateX(0);    opacity: 1; }
+          50%  { transform: translateX(12px); opacity: 0.9; }
+          100% { transform: translateX(0);    opacity: 1; }
+        }
+        .animate-nudge-right { animation: nudge-right 1200ms ease-in-out infinite; }
       `}</style>
     </>
   );

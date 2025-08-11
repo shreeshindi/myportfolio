@@ -73,7 +73,8 @@ const Home = () => {
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } = 'touches' in event ? event.touches[0] : (event as MouseEvent);
+      const { clientX, clientY } =
+        'touches' in event ? event.touches[0] : (event as MouseEvent);
       const button = document.getElementById('bonkers-button');
       if (button) {
         const rect = button.getBoundingClientRect();
@@ -130,7 +131,7 @@ const Home = () => {
       >
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-0"></div>
 
-        {/* DESKTOP ONLY: PNG + Eyes */}
+        {/* DESKTOP ONLY: PNG + Eyes (unchanged) */}
         {!isMobile && !isButtonHovered && (
           <>
             <Image
@@ -167,29 +168,66 @@ const Home = () => {
           />
         )}
 
-        <div className="flex justify-center items-center space-x-4 relative z-10 mb-4" />
+        {/* ===== MOBILE ONLY: video in normal flow, button BELOW it (always shaking) ===== */}
+        {isMobile && (
+          <div className="relative w-full max-w-4xl mx-auto mt-8 px-4">
+            {/* 16:9 */}
+            <div
+              className="relative w-full rounded-xl overflow-hidden shadow-lg"
+              style={{ paddingTop: '56.25%' }}
+            >
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/urLf8lLOqnQ?autoplay=1&mute=1&playsinline=1&controls=0&loop=1&playlist=urLf8lLOqnQ"
+                frameBorder={0}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
 
-        <button
-          id="bonkers-button"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleHireMeClick}
-          className={`text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
-        >
-          Hire me!
-        </button>
-
-        {isNearButton && (
-          <iframe
-            className="absolute top-0 left-0 w-full h-full object-cover z-0"
-            src="https://www.youtube.com/embed/urLf8lLOqnQ?autoplay=1&loop=1&playlist=urLf8lLOqnQ"
-            frameBorder={0}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+            {/* Button BELOW the video, always shaking on mobile */}
+            <div className="w-full flex items-center justify-center mt-6">
+              <button
+                id="bonkers-button"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleHireMeClick}
+                className="text-white py-2 px-4 rounded transition-transform animate-bonkers bg-red-500"
+              >
+                Hire me!
+              </button>
+            </div>
+          </div>
         )}
 
-        <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>
+        {/* ===== DESKTOP ONLY: unchanged original layout ===== */}
+        {!isMobile && (
+          <>
+            <div className="flex justify-center items-center space-x-4 relative z-10 mb-4" />
+
+            <button
+              id="bonkers-button"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleHireMeClick}
+              className={`text-white py-2 px-4 rounded transition-transform relative z-10 ${isNearButton ? 'animate-bonkers' : ''} ${isNearButton ? 'bg-blue-500' : 'bg-red-500'}`}
+            >
+              Hire me!
+            </button>
+
+            {isNearButton && (
+              <iframe
+                className="absolute top-0 left-0 w-full h-full object-cover z-0"
+                src="https://www.youtube.com/embed/urLf8lLOqnQ?autoplay=1&mute=1&playsinline=1&controls=0&loop=1&playlist=urLf8lLOqnQ"
+                frameBorder={0}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            )}
+
+            <div className="absolute top-0 left-0 w-full h-full opacity-95 z-0"></div>
+          </>
+        )}
       </div>
 
       <Footer toggleShowGif={toggleShowGif} />

@@ -2,16 +2,10 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
-/**
- * Mobile-only, full-screen swipe overlay.
- * - Blocks the page until a valid swipe.
- * - Swipe Up  => scroll to "fun" section (prefers #fun, then #home, then #landing).
- * - Swipe Left => navigate to /pro/professional.
- * - Shows on every load (parent just renders this on mobile).
- */
-const MIN_DISTANCE = 80;          // px: minimum swipe travel
-const AXIS_DOMINANCE = 1.2;       // how much one axis must dominate the other
-const MAX_DURATION_MS = 1200;     // optional: gesture must finish within this time
+const MIN_DISTANCE = 80;
+const AXIS_DOMINANCE = 1.2;
+const MAX_DURATION_MS = 1200;
+const FUDGE = 32; // px: arrive slightly before the top so animations start after
 
 const SwipeOverlay: FC = () => {
   const [visible, setVisible] = useState(true);
@@ -21,7 +15,6 @@ const SwipeOverlay: FC = () => {
   const tracking = useRef(false);
   const router = useRouter();
 
-  // Block scroll while visible
   useEffect(() => {
     if (visible) {
       const prevHtml = document.documentElement.style.overflow;
@@ -35,34 +28,28 @@ const SwipeOverlay: FC = () => {
     }
   }, [visible]);
 
-  // Smoothly scroll to "Fun" section
-  const scrollToFun = () => {
-    // prefer #fun, fallback to #home, then #landing
+  const scrollToLandingTopPrecise = () => {
     const el =
-      document.getElementById("fun") ||
-      document.getElementById("home") ||
+      document.getElementById("landing-start") ||
       document.getElementById("landing");
 
-    // Hide overlay first to re-enable scrolling, then smooth scroll
-    setVisible(false);
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        else window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
-      }, 50);
-    });
+    if (!el) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+    const absoluteTop = Math.floor(rect.top + window.pageYOffset);
+    const targetY = Math.max(0, absoluteTop - FUDGE);
+
+    window.scrollTo({ top: targetY, behavior: "smooth" });
   };
 
-  // Go to Professional page
   const goProfessional = () => {
     setVisible(false);
-    // small delay so overlay can fade out cleanly
-    setTimeout(() => {
-      router.push("/pro/professional");
-    }, 50);
+    setTimeout(() => router.push("/pro/professional"), 50);
   };
 
-  // Touch handlers (accurate swipe detection with axis + distance + duration)
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     const t = e.touches[0];
     startX.current = t.clientX;
@@ -72,22 +59,14 @@ const SwipeOverlay: FC = () => {
   };
 
   const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    // Prevent any underlying scroll/jank while gate is up
-    if (tracking.current) {
-      e.preventDefault();
-    }
+    if (tracking.current) e.preventDefault();
   };
 
   const onTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!tracking.current) return;
     tracking.current = false;
-
-    const endTime = performance.now();
-    const duration = endTime - startTime.current;
-    if (duration > MAX_DURATION_MS) {
-      // too slow — ignore for accuracy
-      return;
-    }
+    const duration = performance.now() - startTime.current;
+    if (duration > MAX_DURATION_MS) return;
 
     const t = e.changedTouches[0];
     const dx = t.clientX - startX.current;
@@ -95,10 +74,7 @@ const SwipeOverlay: FC = () => {
     const absDx = Math.abs(dx);
     const absDy = Math.abs(dy);
 
-    // Left swipe (right -> left): dx negative, x-dominant
     const isLeft = dx < -MIN_DISTANCE && absDx > absDy * AXIS_DOMINANCE;
-
-    // Up swipe (down -> up): dy negative, y-dominant
     const isUp = dy < -MIN_DISTANCE && absDy > absDx * AXIS_DOMINANCE;
 
     if (isLeft) {
@@ -106,36 +82,29 @@ const SwipeOverlay: FC = () => {
       return;
     }
     if (isUp) {
-      scrollToFun();
+      setVisible(false);
+      // wait a tick so overflow unlocks
+      requestAnimationFrame(() => setTimeout(scrollToLandingTopPrecise, 50));
       return;
     }
-    // No valid swipe: keep overlay
   };
 
   if (!visible) return null;
 
   return (
     <div
-    id="swipe-gate"                    // <-- add this line
-    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm"
-    role="dialog"
-    aria-modal="true"
-    onTouchStart={onTouchStart}
-    onTouchMove={onTouchMove}
-    onTouchEnd={onTouchEnd}
-  >
-      {/* Content container */}
+      id="swipe-gate"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <div className="w-full h-full flex flex-col items-center justify-between text-white select-none">
-        {/* Top hint: SWIPE LEFT for Professional */}
         <div className="w-full flex items-center justify-between px-6 pt-8">
           <div className="flex items-center gap-3">
-            <svg
-              className="w-10 h-10 md:w-14 md:h-14 animate-nudge-left"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
+            <svg className="w-10 h-10 md:w-14 md:h-14 animate-nudge-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M15 18l-6-6 6-6" />
             </svg>
             <div className="text-lg md:text-2xl font-bold">Swipe Left</div>
@@ -145,34 +114,22 @@ const SwipeOverlay: FC = () => {
           </div>
         </div>
 
-        {/* Center headline */}
         <div className="text-center px-8">
-          <h2 className="text-2xl md:text-4xl font-bold mb-3">
-            Choose your path
-          </h2>
+          <h2 className="text-2xl md:text-4xl font-bold mb-3">Choose your path</h2>
           <p className="text-sm md:text-base opacity-90">
-            Swipe <span className="font-semibold">Up</span> for{" "}
-            <span className="font-semibold">Fun</span> • Swipe{" "}
-            <span className="font-semibold">Left</span> for{" "}
-            <span className="font-semibold">Professional</span>
+            Swipe <span className="font-semibold">Up</span> for <span className="font-semibold">Fun</span> •
+            Swipe <span className="font-semibold">Left</span> for <span className="font-semibold">Professional</span>
           </p>
         </div>
 
-        {/* Bottom hint: SWIPE UP for Fun */}
         <div className="w-full flex flex-col items-center pb-10">
-          <svg
-            className="w-12 h-12 md:w-16 md:h-16 animate-nudge-up mb-2"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
+          <svg className="w-12 h-12 md:w-16 md:h-16 animate-nudge-up mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M6 12l6-6 6 6" />
             <path d="M12 6v12" />
           </svg>
           <div className="text-lg md:text-2xl font-bold">Swipe Up</div>
           <div className="text-sm md:text-base opacity-80">
-            Scroll to <span className="font-semibold">Fun</span>
+            Start at <span className="font-semibold">Landing</span>
           </div>
         </div>
       </div>

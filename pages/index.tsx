@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Eye from '../components/Eye';
 import { useState, useEffect } from 'react';
-import Landing from './landing';
 import Footer from '../funpart/Footer';
 import { useRouter } from 'next/router';
 
@@ -11,9 +10,13 @@ import { useRouter } from 'next/router';
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
 
-// MOBILE peekers + global left-swipe nav
+// MOBILE bits
 import MobilePeekers from '@/components/MobilePeekers';
-import MobileSwipeNav from '@/components/MobileSwipeNav';  // <-- ADD
+import MobileSwipeNav from '@/components/MobileSwipeNav';
+import SwipeOverlay from '@/components/SwipeOverlay';
+
+// Use the shared Landing section
+import LandingSection from '@/components/LandingSection';
 
 function useIsMobileOrTablet(): boolean {
   const [isMob, setIsMob] = useState(false);
@@ -85,15 +88,16 @@ const Home = () => {
 
       <Head><title>My Portfolio</title></Head>
 
-      {/* Make left-swipe to Professional work anywhere on / */}
+      {/* Mobile helper UIs */}
+      {isMobile && <SwipeOverlay />}
       {isMobile && <MobileSwipeNav />}
 
-      {/* Top landing (kept as-is) */}
-      <div id="landing" className={`min-h-screen ${showGif ? 'hidden' : ''}`}>
-        <Landing />
+      {/* Landing — NO id/min-h-screen wrapper; the IDs live inside LandingSection */}
+      <div className={`${showGif ? 'hidden' : ''}`}>
+        <LandingSection />
       </div>
 
-      {/* FUN SECTION — anchor for SwipeOverlay's "Swipe Up" */}
+      {/* FUN SECTION */}
       <div
         id="fun"
         className={`min-h-screen bg-gray-100 relative flex flex-col justify-center items-center ${showGif ? 'hidden' : ''}`}

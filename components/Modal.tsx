@@ -17,6 +17,8 @@ const gifs = [
   'https://media.giphy.com/media/AkAb9pi0dPMqDmJjor/giphy.gif',
 ];
 
+const FUDGE = 32; // px: scroll slightly ABOVE the target so animations start after we arrive
+
 const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -46,12 +48,31 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
     router.push('/pro/professional');
   };
 
-  const handleShowConfirmation = () => {
-    setShowConfirmation(true);
+  const handleShowConfirmation = () => setShowConfirmation(true);
+  const handleCancelConfirmation = () => setShowConfirmation(false);
+
+  const scrollToLandingTopPrecise = () => {
+    const el =
+      document.getElementById('landing-start') ||
+      document.getElementById('landing');
+
+    if (!el) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+    const absoluteTop = Math.floor(rect.top + window.pageYOffset);
+    const targetY = Math.max(0, absoluteTop - FUDGE);
+
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
   };
 
-  const handleCancelConfirmation = () => {
-    setShowConfirmation(false);
+  // Close modal and scroll to precise top of Landing (with fudge)
+  const handleGoFun = () => {
+    onClose();
+    // Wait a tick so overflow is restored and layout is stable
+    setTimeout(scrollToLandingTopPrecise, 60);
   };
 
   if (!isOpen) return null;
@@ -76,7 +97,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
             </div>
             <p className="mb-4 pixelated-text text-center">Really, you dont want to go to the more creative part of the page?</p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+              <button onClick={handleGoFun} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Alright, Go with Fun Part
               </button>
               <button onClick={handleRedirectToProfessional} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">
@@ -90,7 +111,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
             <p className="mb-4 pixelated-text text-center">This is your pop-up message before the landing page loads.</p>
             <p className="mb-4 pixelated-text text-center">Just a heads-up, the fun page is meant to showcase my skills with a light-hearted touch!</p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button onClick={onClose} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
+              <button onClick={handleGoFun} className="px-4 py-2 bg-green-700 text-white rounded pixelated-text hover:bg-green-800">
                 Fun Portfolio
               </button>
               <button onClick={handleShowConfirmation} className="px-4 py-2 bg-blue-700 text-white rounded pixelated-text hover:bg-blue-800">

@@ -10,12 +10,15 @@ import { useRouter } from 'next/router';
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
 
-// MOBILE bits
+// MOBILE helpers
 import MobilePeekers from '@/components/MobilePeekers';
 import MobileSwipeNav from '@/components/MobileSwipeNav';
 import SwipeOverlay from '@/components/SwipeOverlay';
 
-// Use the shared Landing section
+// Desktop popup
+import Modal from '../components/Modal';
+
+// Shared landing section (holds #landing and #landing-start)
 import LandingSection from '@/components/LandingSection';
 
 function useIsMobileOrTablet(): boolean {
@@ -49,8 +52,24 @@ const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [showGif, setShowGif] = useState(false);
+
+  // Desktop popup visibility
+  const [isModalOpen, setModalOpen] = useState(true);
+
   const router = useRouter();
   const isMobile = useIsMobileOrTablet();
+
+  // Keep desktop page blocked while modal is open
+  useEffect(() => {
+    if (!isMobile && isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMobile, isModalOpen]);
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
@@ -58,12 +77,11 @@ const Home = () => {
       const button = document.getElementById('bonkers-button');
       if (button) {
         const rect = button.getBoundingClientRect();
-        const isNear = (
+        const isNear =
           clientX > rect.left - 50 &&
           clientX < rect.right + 50 &&
           clientY > rect.top - 50 &&
-          clientY < rect.bottom + 50
-        );
+          clientY < rect.bottom + 50;
         setIsNearButton(isNear);
       }
     };
@@ -83,16 +101,19 @@ const Home = () => {
 
   return (
     <div className={cursorStyles.scope}>
-      {/* Desktop only */}
+      {/* Desktop only cursor */}
       {!isMobile && <ServerCursor />}
 
       <Head><title>My Portfolio</title></Head>
 
-      {/* Mobile helper UIs */}
+      {/* Mobile: full-screen swipe overlay + left-swipe nav; NO popup */}
       {isMobile && <SwipeOverlay />}
       {isMobile && <MobileSwipeNav />}
 
-      {/* Landing — NO id/min-h-screen wrapper; the IDs live inside LandingSection */}
+      {/* Desktop: keep popup */}
+      {!isMobile && <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />}
+
+      {/* Landing — do NOT wrap with an element that has id="landing" to avoid duplicate IDs */}
       <div className={`${showGif ? 'hidden' : ''}`}>
         <LandingSection />
       </div>

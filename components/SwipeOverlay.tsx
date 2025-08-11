@@ -117,7 +117,7 @@ const SwipeOverlay: FC = () => {
         <div className="text-center px-8">
           <h2 className="text-2xl md:text-4xl font-bold mb-3">Choose your path</h2>
           <p className="text-sm md:text-base opacity-90">
-            Swipe <span className="font-semibold">Up</span> for <span className="font-semibold">Fun</span> •
+            Swipe <span className="font-semibold">Up</span> for <span className="font-semibold">Fun</span><span className="font-semibold">Page</span> •
             Swipe <span className="font-semibold">Left</span> for <span className="font-semibold">Professional</span>
           </p>
         </div>

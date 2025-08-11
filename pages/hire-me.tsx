@@ -6,8 +6,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Theme = {
   name: string;
-  bgClass: string;       // Tailwind gradient classes
-  tintClass: string;     // Overlay
+  bgClass: string;
+  tintClass: string;
   buttonClass: string;
   buttonHoverClass: string;
 };
@@ -48,14 +48,18 @@ const EMOJIS = ['✨', '⚡', '💥', '🔥', '💫', '🫶', '🚀', '🎯', '�
 
 const isIOS = () => {
   if (typeof navigator === 'undefined') return false;
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.userAgent.includes('Mac') && typeof document !== 'undefined' && 'ontouchend' in document);
 };
 
 const HireMe = () => {
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [headline, setHeadline] = useState<string>('CONNECT');
   const [theme, setTheme] = useState<Theme>(THEMES[0]);
+
   const [isCoarse, setIsCoarse] = useState<boolean>(false);
+
+  // Motion permission state for mobile
   const [motionAllowed, setMotionAllowed] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,13 +67,13 @@ const HireMe = () => {
   const btnRef = useRef<HTMLAnchorElement>(null);
   const glitchTimer = useRef<number | null>(null);
 
-  // ---------------- Desktop-only custom cursor ----------------
+  // Desktop-only custom cursor
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorInnerRef = useRef<HTMLDivElement>(null);
   const [cursorVariant, setCursorVariant] = useState<'emoji' | 'dot' | 'ring' | 'blob'>('emoji');
   const [cursorEmoji, setCursorEmoji] = useState<string>('🚀');
 
-  // ---------------- Randomize all on mount ----------------
+  // ---------- Randomize + pointer detection ----------
   useEffect(() => {
     const images = [
       '/image/dev1.webp',
@@ -82,28 +86,24 @@ const HireMe = () => {
     setHeadline(HEADLINES[Math.floor(Math.random() * HEADLINES.length)]);
     setTheme(THEMES[Math.floor(Math.random() * THEMES.length)]);
 
-    // detect coarse pointer (mobile/tablet)
     const mql = window.matchMedia('(pointer: coarse)');
     const setMode = () => setIsCoarse(mql.matches);
     setMode();
     mql.addEventListener?.('change', setMode);
 
-    // cursor variant + emoji (desktop only)
+    // Desktop cursor variant/emoji
     if (!mql.matches) {
       const variants: Array<'emoji' | 'dot' | 'ring' | 'blob'> = ['emoji', 'dot', 'ring', 'blob'];
       setCursorVariant(variants[Math.floor(Math.random() * variants.length)]);
       setCursorEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
     }
 
-    return () => {
-      mql.removeEventListener?.('change', setMode);
-    };
+    return () => { mql.removeEventListener?.('change', setMode); };
   }, []);
 
-  // ---------------- Desktop cursor follow + emoji trail ----------------
+  // ---------- Desktop cursor follow + emoji trail ----------
   useEffect(() => {
-    if (isCoarse) return; // mobile: skip cursor logic
-
+    if (isCoarse) return;
     const cur = cursorRef.current;
     if (!cur) return;
 
@@ -114,7 +114,6 @@ const HireMe = () => {
     const onMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      // desktop emoji trail (lightweight)
       spawnEmoji(e.clientX, e.clientY, 0.9, true);
     };
 
@@ -141,7 +140,7 @@ const HireMe = () => {
     };
   }, [isCoarse]);
 
-  // Grow cursor over links/buttons (desktop only)
+  // ---------- Desktop cursor "hot" over interactives ----------
   useEffect(() => {
     if (isCoarse) return;
     const onOver = (e: MouseEvent) => {
@@ -157,77 +156,111 @@ const HireMe = () => {
     return () => window.removeEventListener('mousemove', onOver);
   }, [isCoarse]);
 
-  // ---------------- Parallax tilt (desktop: mouse, mobile: device motion) ----------------
+  // ---------- DESKTOP tilt (mouse) ----------
   useEffect(() => {
+    if (isCoarse) return;
     const tiltEl = tiltRef.current;
     if (!tiltEl) return;
 
-    if (!isCoarse) {
-      // Desktop: mouse-based tilt
-      const onMove = (e: MouseEvent) => {
-        const rect = tiltEl.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) / rect.width;
-        const dy = (e.clientY - cy) / rect.height;
-        const rotateX = (dy * -10).toFixed(2);
-        const rotateY = (dx * 12).toFixed(2);
-        tiltEl.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-      };
-      const onLeave = () => {
-        tiltEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
-      };
-      window.addEventListener('mousemove', onMove);
-      window.addEventListener('mouseleave', onLeave);
-      return () => {
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('mouseleave', onLeave);
-      };
-    } else {
-      // Mobile: device orientation tilt
-      let handler: ((e: DeviceOrientationEvent) => void) | null = null;
+    const onMove = (e: MouseEvent) => {
+      const rect = tiltEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / rect.width;
+      const dy = (e.clientY - cy) / rect.height;
+      const rotateX = (dy * -10).toFixed(2);
+      const rotateY = (dx * 12).toFixed(2);
+      tiltEl.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    };
+    const onLeave = () => {
+      tiltEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+    };
 
-      const startMotion = () => {
-        handler = (e: DeviceOrientationEvent) => {
-          const beta = e.beta ?? 0;  // front-back tilt (-180,180)
-          const gamma = e.gamma ?? 0; // left-right tilt (-90,90)
-          const rotateX = Math.max(-10, Math.min(10, -(beta / 90) * 10));
-          const rotateY = Math.max(-12, Math.min(12, (gamma / 60) * 12));
-          tiltEl.style.transform = `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
-        };
-        window.addEventListener('deviceorientation', handler, true);
-      };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseleave', onLeave);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseleave', onLeave);
+    };
+  }, [isCoarse]);
 
-      // if already allowed (Android / some browsers), start immediately
-      if (typeof (DeviceOrientationEvent as any) !== 'undefined' && typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-        // iOS requires explicit permission; show button below
-      } else {
-        startMotion();
-        setMotionAllowed(true);
-      }
-
-      return () => {
-        if (handler) window.removeEventListener('deviceorientation', handler, true);
-      };
+  // ---------- MOBILE motion: auto-allow if no permission API ----------
+  useEffect(() => {
+    if (!isCoarse) return;
+    const needPerm = typeof (DeviceOrientationEvent as any)?.requestPermission === 'function';
+    if (!needPerm) {
+      // Android / browsers that don't require explicit permission
+      setMotionAllowed(true);
     }
   }, [isCoarse]);
 
-  // iOS "Enable Motion" button
+  // ---------- MOBILE tilt (deviceorientation) when allowed ----------
+  useEffect(() => {
+    if (!isCoarse || !motionAllowed) return;
+    const tiltEl = tiltRef.current;
+    if (!tiltEl) return;
+
+    const handler = (e: DeviceOrientationEvent) => {
+      const beta = e.beta ?? 0;   // front/back
+      const gamma = e.gamma ?? 0; // left/right
+      const rotateX = Math.max(-10, Math.min(10, -(beta / 90) * 10));
+      const rotateY = Math.max(-12, Math.min(12, (gamma / 60) * 12));
+      tiltEl.style.transform =
+        `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
+    };
+
+    window.addEventListener('deviceorientation', handler, true);
+    return () => window.removeEventListener('deviceorientation', handler, true);
+  }, [isCoarse, motionAllowed]);
+
+  // ---------- MOBILE fallback: touch-move tilt if motion not allowed ----------
+  useEffect(() => {
+    if (!isCoarse || motionAllowed) return;
+    const tiltEl = tiltRef.current;
+    if (!tiltEl) return;
+
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      const rect = tiltEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (t.clientX - cx) / rect.width;
+      const dy = (t.clientY - cy) / rect.height;
+      const rotateX = (dy * -10);
+      const rotateY = (dx * 12);
+      tiltEl.style.transform =
+        `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
+    };
+    const onTouchEnd = () => {
+      tiltEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+    };
+
+    tiltEl.addEventListener('touchmove', onTouchMove, { passive: true });
+    tiltEl.addEventListener('touchend', onTouchEnd, { passive: true });
+    tiltEl.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+    return () => {
+      tiltEl.removeEventListener('touchmove', onTouchMove as any);
+      tiltEl.removeEventListener('touchend', onTouchEnd as any);
+      tiltEl.removeEventListener('touchcancel', onTouchEnd as any);
+    };
+  }, [isCoarse, motionAllowed]);
+
+  // iOS: explicit permission
   const requestIOSMotion = async () => {
     try {
-      const perm = await (DeviceOrientationEvent as any).requestPermission();
-      if (perm === 'granted') {
-        setMotionAllowed(true);
-        // trigger the effect hook above by re-setting state
-        // (small trick: flip isCoarse to same value to re-run effect)
-        setIsCoarse((v) => v);
+      const req = (DeviceOrientationEvent as any)?.requestPermission;
+      if (typeof req === 'function') {
+        const perm = await req();
+        if (perm === 'granted') setMotionAllowed(true);
       }
     } catch {
       setMotionAllowed(false);
     }
   };
 
-  // ---------------- Glitch headline ----------------
+  // ---------- Glitch headline ----------
   useEffect(() => {
     const el = document.getElementById('glitchTitle');
     if (!el) return;
@@ -243,20 +276,14 @@ const HireMe = () => {
       }, 3000 + Math.random() * 4000);
     };
     schedule();
-    return () => {
-      if (glitchTimer.current) window.clearTimeout(glitchTimer.current);
-    };
+    return () => { if (glitchTimer.current) window.clearTimeout(glitchTimer.current); };
   }, []);
 
-  // ---------------- Particles / Confetti ----------------
-  // desktop: light emoji trail handled in cursor move
-  // mobile: idle floating particles + tap confetti
+  // ---------- Mobile particles + tap confetti ----------
   useEffect(() => {
     if (!isCoarse) return;
-
     let alive = true;
 
-    // idle gentle particles
     const spawnIdle = () => {
       if (!alive) return;
       const x = Math.random() * window.innerWidth;
@@ -266,14 +293,10 @@ const HireMe = () => {
     };
     spawnIdle();
 
-    // tap confetti
     const onTouch = (e: TouchEvent) => {
       const touches = Array.from(e.touches);
       touches.forEach((t) => {
-        // bigger, denser burst on tap
-        for (let i = 0; i < 10; i++) {
-          spawnEmoji(t.clientX, t.clientY, 1, false);
-        }
+        for (let i = 0; i < 10; i++) spawnEmoji(t.clientX, t.clientY, 1, false);
       });
     };
     window.addEventListener('touchstart', onTouch, { passive: true });
@@ -284,10 +307,11 @@ const HireMe = () => {
     };
   }, [isCoarse]);
 
-  // Create and animate a floating emoji
-  // desktopLight: true => shorter trail
-  // idle: true => spawn from bottom area, float up slower
-  const spawnEmoji = (x: number, y: number, opacity = 0.9, desktopLight = false, idle = false) => {
+  // Create + animate a floating emoji
+  const spawnEmoji = (
+    x: number, y: number,
+    opacity = 0.9, desktopLight = false, idle = false
+  ) => {
     const span = document.createElement('span');
     span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     span.style.position = 'fixed';
@@ -320,7 +344,7 @@ const HireMe = () => {
     }
   };
 
-  // ---------------- Magnetic button (all devices) ----------------
+  // ---------- Magnetic button (desktop hover only) ----------
   useEffect(() => {
     const anchor = btnRef.current;
     if (!anchor) return;
@@ -330,10 +354,7 @@ const HireMe = () => {
       const dy = e.clientY - (rect.top + rect.height / 2);
       anchor.style.transform = `translate(${dx * 0.08}px, ${dy * 0.08}px) scale(1.02)`;
     };
-    const onLeave = () => {
-      anchor.style.transform = 'translate(0,0) scale(1)';
-    };
-    // mouse only (on touch it remains normal)
+    const onLeave = () => { anchor.style.transform = 'translate(0,0) scale(1)'; };
     anchor.addEventListener('mousemove', onMove);
     anchor.addEventListener('mouseleave', onLeave);
     return () => {
@@ -351,9 +372,7 @@ const HireMe = () => {
       className={`min-h-screen ${theme.bgClass} relative overflow-hidden text-white hireme-root`}
       style={containerStyle}
     >
-      <Head>
-        <title>Hire Me</title>
-      </Head>
+      <Head><title>Hire Me</title></Head>
 
       {/* Grid overlay + tint */}
       <div
@@ -368,8 +387,8 @@ const HireMe = () => {
       />
       <div className={`absolute inset-0 ${theme.tintClass}`} />
 
-      {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
+      {/* Content: safe-area padding so it doesn't touch top/bottom on phones */}
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 safe-py">
         {/* Headline with glitch */}
         <h1
           id="glitchTitle"
@@ -385,10 +404,12 @@ const HireMe = () => {
         </h1>
 
         {/* iOS motion permission button (only when needed) */}
-        {isCoarse && isIOS() && !motionAllowed && typeof (DeviceOrientationEvent as any)?.requestPermission === 'function' && (
+        {isCoarse && isIOS() &&
+          !motionAllowed &&
+          typeof (DeviceOrientationEvent as any)?.requestPermission === 'function' && (
           <button
             onClick={requestIOSMotion}
-            className="mt-4 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm backdrop-blur hover:bg-white/20 transition"
+            className="mt-5 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm backdrop-blur hover:bg-white/20 transition"
           >
             Enable Motion
           </button>
@@ -450,7 +471,7 @@ const HireMe = () => {
         <p className="mt-8 text-sm text-white/80">Tip: Reload — the vibe changes each time.</p>
       </div>
 
-      {/* Desktop-only custom cursor (mobile has no system cursor) */}
+      {/* Desktop-only custom cursor */}
       {!isCoarse && (
         <div
           ref={cursorRef}
@@ -459,50 +480,33 @@ const HireMe = () => {
         >
           <div
             ref={cursorInnerRef}
-            className={`transition-transform duration-120 ease-out will-change-transform ${
-              cursorVariant === 'emoji' ? 'text-2xl' : ''
-            }`}
+            className={`transition-transform duration-120 ease-out will-change-transform ${cursorVariant === 'emoji' ? 'text-2xl' : ''}`}
             style={{
               transform: 'translate(-50%, -50%)',
               filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.35))',
             }}
           >
             {cursorVariant === 'emoji' && <span>{cursorEmoji}</span>}
-
             {cursorVariant === 'dot' && (
-              <div
-                style={{
-                  width: 10,
-                  height: 10,
-                  background: 'white',
-                  borderRadius: '999px',
-                  outline: '2px solid rgba(255,255,255,.5)',
-                }}
-              />
+              <div style={{ width: 10, height: 10, background: 'white', borderRadius: '999px', outline: '2px solid rgba(255,255,255,.5)' }} />
             )}
-
             {cursorVariant === 'ring' && (
               <div
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '999px',
+                  width: 32, height: 32, borderRadius: '999px',
                   border: '2px solid rgba(255,255,255,.85)',
                   boxShadow: '0 0 0 4px rgba(255,255,255,.15)',
                   backdropFilter: 'blur(2px)',
                 }}
               />
             )}
-
             {cursorVariant === 'blob' && (
               <div
                 className="animate-[blobPulse_3s_ease-in-out_infinite]"
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: 28, height: 28,
                   borderRadius: '20% 80% 70% 30% / 30% 30% 70% 70%',
-                  background:
-                    'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,.3), rgba(255,255,255,.9))',
+                  background: 'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,.3), rgba(255,255,255,.9))',
                   mixBlendMode: 'screen',
                   boxShadow: '0 8px 30px rgba(255,255,255,.25)',
                 }}
@@ -514,10 +518,18 @@ const HireMe = () => {
 
       {/* Styles */}
       <style jsx global>{`
-        /* Hide system cursor ONLY on desktop (we render our own).
-           On mobile, there is no cursor anyway and we don't hide it. */
+        /* Desktop only: hide system cursor (we render our own). */
         @media (pointer: fine) {
           #hireme-root, #hireme-root * { cursor: none !important; }
+        }
+
+        /* Safe-area + top/bottom breathing room on phones */
+        .safe-py { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        @supports (padding: max(0px)) {
+          .safe-py {
+            padding-top: max(2.5rem, env(safe-area-inset-top));
+            padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+          }
         }
 
         .glitch {

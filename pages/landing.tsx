@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import Modal from '../components/Modal';
 import SwipeOverlay from '@/components/SwipeOverlay';
-import MobileSwipeNav from '@/components/MobileSwipeNav';   // <-- ADD
+import MobileSwipeNav from '@/components/MobileSwipeNav';
 
 // Cursor (scoped)
 import ServerCursor from '@/components/ServerCursor';
@@ -54,7 +54,7 @@ const Landing = () => {
         const paragraphs = textRef.current.querySelectorAll('p');
         paragraphs.forEach((p) => {
           const chars = p.textContent!.split('');
-          p.innerHTML = '';
+          (p as HTMLElement).innerHTML = '';
           chars.forEach((char) => {
             const span = document.createElement('span');
             span.textContent = char;
@@ -100,7 +100,8 @@ const Landing = () => {
 
   return (
     <div className={cursorStyles.scope}>
-      <ServerCursor />
+      {/* Desktop only */}
+      {!isMobile && <ServerCursor />}
 
       {/* MOBILE: full-screen gate + persistent left-swipe nav */}
       {isMobile && <SwipeOverlay />}

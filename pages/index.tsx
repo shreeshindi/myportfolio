@@ -80,7 +80,8 @@ const Home = () => {
 
   return (
     <div className={cursorStyles.scope}>
-      <ServerCursor />
+      {/* Desktop only */}
+      {!isMobile && <ServerCursor />}
 
       <Head><title>My Portfolio</title></Head>
 

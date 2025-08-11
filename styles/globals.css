@@ -164,6 +164,15 @@ html {
   50%  { transform: translateY(-12px); opacity: 0.9; }
   100% { transform: translateY(0);    opacity: 1; }
 }
+
+/* right arrow nudge */
+@keyframes nudge-right {
+  0%   { transform: translateX(0);    opacity: 1; }
+  50%  { transform: translateX(12px); opacity: 0.9; }
+  100% { transform: translateX(0);    opacity: 1; }
+}
+.animate-nudge-right { animation: nudge-right 1200ms ease-in-out infinite; }
+
 .animate-nudge-left { animation: nudge-left 1200ms ease-in-out infinite; }
 .animate-nudge-up   { animation: nudge-up   1200ms ease-in-out infinite; }
 

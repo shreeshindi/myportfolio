@@ -1,16 +1,43 @@
 // pages/pro/professional.tsx
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Space_Grotesk } from 'next/font/google';
-import { useRouter } from 'next/router';
+import MobileBackSwipe from '@/components/MobileBackSwipe';
 
 const grotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   display: 'swap',
 });
+
+function useIsMobileOrTablet(): boolean {
+  const [isMob, setIsMob] = useState(false);
+  useEffect(() => {
+    const q1 = window.matchMedia('(pointer: coarse)');
+    const q2 = window.matchMedia('(max-width: 1024px)');
+    const update = () => setIsMob(q1.matches || q2.matches);
+    update();
+    const onChange = () => update();
+    if ((q1 as any).addEventListener) {
+      q1.addEventListener('change', onChange);
+      q2.addEventListener('change', onChange);
+      return () => {
+        q1.removeEventListener('change', onChange);
+        q2.removeEventListener('change', onChange);
+      };
+    } else {
+      q1.addListener(onChange);
+      q2.addListener(onChange);
+      return () => {
+        q1.removeListener(onChange);
+        q2.removeListener(onChange);
+      };
+    }
+  }, []);
+  return isMob;
+}
 
 const IconDownload: FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
@@ -28,27 +55,10 @@ const IconGitHub: FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-function isMobileOrTablet(): boolean {
-  if (typeof window === 'undefined') return false;
-  return (
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(max-width: 1024px)').matches
-  );
-}
-
-function isInteractive(el: EventTarget | null): boolean {
-  if (!(el instanceof Element)) return false;
-  const tag = el.tagName?.toLowerCase();
-  if (['a','button','input','textarea','select','label','iframe','video','canvas'].includes(tag)) return true;
-  if ((el as HTMLElement).isContentEditable) return true;
-  if (el.closest('[data-no-swipe="true"]')) return true;
-  return false;
-}
-
 const Professional: FC = () => {
-  const router = useRouter();
+  const isMobile = useIsMobileOrTablet();
 
-  // mouse-follow glare spotlight (desktop nicety)
+  // mouse-follow glare spotlight (desktop)
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
       document.documentElement.style.setProperty('--mx', `${e.clientX}px`);
@@ -58,65 +68,6 @@ const Professional: FC = () => {
     return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
-  // ===== Mobile: swipe RIGHT (left -> right) to go back to Fun on home (#fun) =====
-  useEffect(() => {
-    if (!isMobileOrTablet()) return;
-
-    const MIN_DISTANCE = 80;      // px
-    const AXIS_DOMINANCE = 1.2;   // x must dominate y
-    const MAX_DURATION_MS = 1200; // gesture speed cap
-    const LEFT_EDGE_MAX = Math.min(100, (typeof window !== 'undefined' ? window.innerWidth : 360) * 0.15);
-
-    const startX = { current: 0 };
-    const startY = { current: 0 };
-    const startTime = { current: 0 };
-    const tracking = { current: false };
-    const startTarget = { current: null as EventTarget | null };
-
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      const t = e.touches[0];
-      startX.current = t.clientX;
-      startY.current = t.clientY;
-      startTime.current = performance.now();
-      startTarget.current = e.target;
-      tracking.current = true;
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      if (!tracking.current) return;
-      tracking.current = false;
-
-      if (isInteractive(startTarget.current)) return;
-
-      const duration = performance.now() - startTime.current;
-      if (duration > MAX_DURATION_MS) return;
-
-      const t = e.changedTouches[0];
-      const dx = t.clientX - startX.current;
-      const dy = t.clientY - startY.current;
-      const absDx = Math.abs(dx);
-      const absDy = Math.abs(dy);
-
-      // Require starting near the LEFT edge to reduce accidental triggers
-      if (startX.current > LEFT_EDGE_MAX) return;
-
-      const isRight = dx > MIN_DISTANCE && absDx > absDy * AXIS_DOMINANCE;
-      if (isRight) {
-        // Navigate to home Fun section (overlay on home will still show as per your spec)
-        router.push('/#fun');
-      }
-    };
-
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      window.removeEventListener('touchstart', onTouchStart as any);
-      window.removeEventListener('touchend', onTouchEnd as any);
-    };
-  }, [router]);
-
   return (
     <>
       <Head>
@@ -125,7 +76,11 @@ const Professional: FC = () => {
           name="description"
           content="Senior Software Engineer (Backend). Java + Spring Boot. I build clean, secure, production-ready APIs with real-world reliability."
         />
+        <link rel="preload" as="image" href="/image/12.png" />
       </Head>
+
+      {/* MOBILE: swipe-right back to Fun overlay + gesture */}
+      {isMobile && <MobileBackSwipe />}
 
       <div className={`${grotesk.className} relative min-h-screen overflow-hidden text-white`}>
         {/* Background: animated blobs + grid + tint */}
@@ -145,7 +100,7 @@ const Professional: FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-900/70 to-black/85" />
         </div>
 
-        {/* Mouse-follow glare */}
+        {/* Mouse-follow glare (desktop) */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10"
@@ -159,7 +114,7 @@ const Professional: FC = () => {
         {/* Header */}
         <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
           <Link href="/pro/professional" className="flex items-center gap-3">
-            <Image src="/image/12.png" alt="Logo" width={40} height={40} priority />
+            <Image src="/image/12.png" alt="Logo" width={40} height={40} />
             <span className="text-xl font-semibold tracking-wide">Shreenidhi</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
@@ -316,31 +271,11 @@ const Professional: FC = () => {
           <h2 className="text-2xl font-bold">Projects</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {[
-              {
-                name: 'AwayTogether (Flycatch Tech)',
-                desc: 'Hotel management platform with Spring Boot + MySQL + Docker.',
-                stack: ['Spring Boot','MySQL','Docker'],
-              },
-              {
-                name: 'Authentication Core (Flycatch Tech)',
-                desc: 'Pluggable auth module (JWT/Session) reusable across Spring apps.',
-                stack: ['Java','Spring Security','JWT/Session'],
-              },
-              {
-                name: 'SmartFarm (Hanriver)',
-                desc: 'Task routing & scheduling for vertical farms; reliability-first design.',
-                stack: ['Spring Boot','PostgreSQL','Docker'],
-              },
-              {
-                name: 'SmartRoot (Hanriver)',
-                desc: 'IoT-enabled farm management with real-time insights.',
-                stack: ['Java','Spring Boot','Containers'],
-              },
-              {
-                name: 'MFS Bulk Payment',
-                desc: 'High-performance, secure bulk payment processing.',
-                stack: ['Spring Boot','Hibernate','MySQL'],
-              },
+              { name: 'AwayTogether (Flycatch Tech)', desc: 'Hotel management platform with Spring Boot + MySQL + Docker.', stack: ['Spring Boot','MySQL','Docker'] },
+              { name: 'Authentication Core (Flycatch Tech)', desc: 'Pluggable auth module (JWT/Session) reusable across Spring apps.', stack: ['Java','Spring Security','JWT/Session'] },
+              { name: 'SmartFarm (Hanriver)', desc: 'Task routing & scheduling for vertical farms; reliability-first design.', stack: ['Spring Boot','PostgreSQL','Docker'] },
+              { name: 'SmartRoot (Hanriver)', desc: 'IoT-enabled farm management with real-time insights.', stack: ['Java','Spring Boot','Containers'] },
+              { name: 'MFS Bulk Payment', desc: 'High-performance, secure bulk payment processing.', stack: ['Spring Boot','Hibernate','MySQL'] },
             ].map((p) => (
               <div key={p.name} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
                 <h3 className="text-lg font-semibold">{p.name}</h3>
@@ -365,41 +300,15 @@ const Professional: FC = () => {
               <a href="/image/shreenidhi.pdf" download className="rounded-lg bg-white px-4 py-2 text-black hover:opacity-90">
                 Download Resume
               </a>
-              <a
-                href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20"
-              >
+              <a href="https://www.linkedin.com/in/shreenidhi-mc-vernekar-29a050259/" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20">
                 LinkedIn
               </a>
-              <a
-                href="https://github.com/shreeshindi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20"
-              >
+              <a href="https://github.com/shreeshindi" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 hover:bg-white/20">
                 GitHub
               </a>
             </div>
           </div>
         </footer>
-
-        {/* MOBILE-ONLY hint: Swipe → Fun */}
-        <div className="fixed bottom-4 left-4 right-4 z-20 md:hidden">
-          <div className="mx-auto w-full max-w-sm rounded-xl border border-white/15 bg-black/40 px-4 py-3 backdrop-blur-md text-white/90 flex items-center justify-between">
-            <span className="text-sm">Swipe right for <span className="font-semibold">Fun</span></span>
-            <svg
-              className="h-6 w-6 animate-nudge-right"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </div>
-        </div>
       </div>
 
       {/* Extra CSS for animations */}
@@ -410,12 +319,6 @@ const Professional: FC = () => {
           66% { transform: translate(-25px, 10px) scale(0.98); }
           100% { transform: translate(0px, 0px) scale(1); }
         }
-        @keyframes nudge-right {
-          0%   { transform: translateX(0);    opacity: 1; }
-          50%  { transform: translateX(12px); opacity: 0.9; }
-          100% { transform: translateX(0);    opacity: 1; }
-        }
-        .animate-nudge-right { animation: nudge-right 1200ms ease-in-out infinite; }
       `}</style>
     </>
   );

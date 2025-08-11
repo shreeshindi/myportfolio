@@ -42,7 +42,10 @@ const Professional: FC = () => {
     <>
       <Head>
         <title>Shreenidhi — Professional</title>
-        <meta name="description" content="Backend Engineer (Java, Spring Boot) — clean APIs, secure services, production-ready systems." />
+        <meta
+          name="description"
+          content="Senior Software Engineer (Backend). Java + Spring Boot. I build clean, secure, production-ready APIs with real-world reliability."
+        />
       </Head>
 
       <div className={`${grotesk.className} relative min-h-screen overflow-hidden text-white`}>
@@ -83,7 +86,6 @@ const Professional: FC = () => {
           <nav className="hidden gap-6 md:flex">
             <Link href="/pro/professional" className="hover:opacity-80">Home</Link>
             <Link href="/pro/about" className="hover:opacity-80">About</Link>
-            {/* Contact removed */}
           </nav>
         </header>
 
@@ -94,14 +96,14 @@ const Professional: FC = () => {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-sm">
                   <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                  Open to backend roles
+                  Open to Senior Backend roles
                 </div>
                 <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">
                   Building <span className="bg-gradient-to-r from-sky-300 to-fuchsia-300 bg-clip-text text-transparent">secure, fast</span> backends
                 </h1>
                 <p className="mt-4 max-w-prose text-white/85">
-                  I ship clean APIs and resilient services with Java, Spring Boot, JPA/Hibernate, PostgreSQL/MySQL, Docker,
-                  and proper security. Pragmatic designs, production focus, and boring reliability.
+                  Results-driven backend engineer with 5+ years in Java & Spring Boot.
+                  I deliver clean REST APIs, strong auth (JWT/Session), observability, and deployments that don’t break on Monday.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -135,9 +137,9 @@ const Professional: FC = () => {
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   {[
-                    'Java', 'Spring Boot', 'Spring Security', 'REST APIs',
-                    'JPA/Hibernate', 'PostgreSQL', 'MySQL', 'MongoDB',
-                    'Docker', 'CI/CD', 'Caching', 'Resilience'
+                    'Java','Spring Boot','Spring Security','REST APIs',
+                    'JPA/Hibernate','PostgreSQL','MySQL','MongoDB',
+                    'Docker','CI/CD','FastAPI','Microservices'
                   ].map((s) => (
                     <span key={s} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-white/80">
                       {s}
@@ -147,8 +149,10 @@ const Professional: FC = () => {
               </div>
 
               <div className="relative">
-                <div className="absolute -inset-6 -z-10 rounded-3xl opacity-50 blur-2xl"
-                     style={{ background: 'conic-gradient(from 180deg at 50% 50%, #22d3ee, #a855f7, #60a5fa, #22d3ee)' }} />
+                <div
+                  className="absolute -inset-6 -z-10 rounded-3xl opacity-50 blur-2xl"
+                  style={{ background: 'conic-gradient(from 180deg at 50% 50%, #22d3ee, #a855f7, #60a5fa, #22d3ee)' }}
+                />
                 <Image
                   src="/image/Capture1.png"
                   alt="Work preview"
@@ -165,9 +169,9 @@ const Professional: FC = () => {
         <section className="mx-auto w-full max-w-7xl px-6 pb-4 md:pb-8">
           <div className="grid gap-6 md:grid-cols-3">
             {[
-              { title: 'Secure by default', desc: 'JWT/session auth, hardened headers, least privilege, and audit-friendly logs.' },
-              { title: 'Performance-first', desc: 'Query tuning, indices, caching; ship APIs with low latency and predictable throughput.' },
-              { title: 'Ops ready', desc: 'Dockerized services, env configs, sensible CI/CD and rollout strategies.' },
+              { title: 'Secure by default', desc: 'JWT/session auth, strict headers, least-privilege access, audit-ready logs.' },
+              { title: 'Performance-first', desc: 'Indexes, query tuning, caching; stable latency and predictable throughput.' },
+              { title: 'Ops ready', desc: 'Dockerized, env-based configs, sensible CI/CD and safe rollouts.' },
             ].map((c) => (
               <div key={c.title} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
                 <h3 className="text-lg font-semibold">{c.title}</h3>
@@ -177,22 +181,37 @@ const Professional: FC = () => {
           </div>
         </section>
 
-        {/* Experience */}
+        {/* Experience (updated) */}
         <section className="mx-auto w-full max-w-7xl px-6 py-8">
           <h2 className="text-2xl font-bold">Experience</h2>
           <div className="mt-6 space-y-6">
             <div className="relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
               <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                 <div>
-                  <h3 className="text-lg font-semibold">Software Engineer — Hanriver, Kolkata</h3>
-                  <p className="text-white/70">May 2023 – Present</p>
+                  <h3 className="text-lg font-semibold">Senior Software Engineer — Flycatch Tech</h3>
+                  <p className="text-white/70">Aug 2024 – Present</p>
                 </div>
-                <div className="text-white/80">Java • Spring Boot • Docker • PostgreSQL • MySQL</div>
+                <div className="text-white/80">Java • Spring Boot • MySQL • Docker</div>
               </div>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
-                <li>Led SmartFarm & SmartRoot backends; modular monolith with solid domain boundaries.</li>
-                <li>Hardened auth with Spring Security; implemented secure session/JWT flows.</li>
-                <li>Cut response times ~20% with query/index tuning and practical caching.</li>
+                <li>Delivered backend for AwayTogether & a pluggable Authentication Core.</li>
+                <li>Built internal tools (jukebox, activity scheduler) to improve guest engagement.</li>
+                <li>Migrated services to a Strapi-backed CMS for consistent API contracts.</li>
+              </ul>
+            </div>
+
+            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Software Engineer — Hanriver, Kolkata</h3>
+                  <p className="text-white/70">May 2023 – Jul 2024</p>
+                </div>
+                <div className="text-white/80">Java • Spring Boot • Docker • PostgreSQL</div>
+              </div>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
+                <li>Led SmartFarm (vertical farm ERP) and SmartRoot (IoT farm management) backends.</li>
+                <li>Implemented SSO with Spring Security across multiple apps.</li>
+                <li>Improved API response times ~20% via tuning & caching.</li>
               </ul>
             </div>
 
@@ -202,36 +221,46 @@ const Professional: FC = () => {
                   <h3 className="text-lg font-semibold">Backend Developer — Kingston Info Solution Services</h3>
                   <p className="text-white/70">Apr 2020 – Apr 2023</p>
                 </div>
-                <div className="text-white/80">Java • Spring Boot • Hibernate • Payments</div>
+                <div className="text-white/80">Java • Spring Boot • Hibernate • MySQL</div>
               </div>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
-                <li>Built MFS Bulk Payment system handling secure, high-volume transactions.</li>
-                <li>Introduced structured logging (AOP + Log4J) for traceability and faster RCA.</li>
-                <li>Partnered with frontend & ops to ship stable features with clean API contracts.</li>
+                <li>Built and maintained MFS Bulk Payment for secure, high-volume transactions.</li>
+                <li>Added structured logging with AOP + Log4J for faster RCA.</li>
+                <li>Query optimization and caching cut bulk processing time by ~15%.</li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* Projects */}
+        {/* Projects (updated) */}
         <section className="mx-auto w-full max-w-7xl px-6 pb-10">
           <h2 className="text-2xl font-bold">Projects</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {[
               {
+                name: 'AwayTogether (Flycatch Tech)',
+                desc: 'Hotel management platform with Spring Boot + MySQL + Docker.',
+                stack: ['Spring Boot','MySQL','Docker'],
+              },
+              {
+                name: 'Authentication Core (Flycatch Tech)',
+                desc: 'Pluggable auth module (JWT/Session) reusable across Spring apps.',
+                stack: ['Java','Spring Security','JWT/Session'],
+              },
+              {
                 name: 'SmartFarm (Hanriver)',
-                desc: 'Routing & task management for farm services. Strong scheduling & reliability focus.',
-                stack: ['Spring Boot', 'PostgreSQL', 'Docker'],
+                desc: 'Task routing & scheduling for vertical farms; reliability-first design.',
+                stack: ['Spring Boot','PostgreSQL','Docker'],
               },
               {
                 name: 'SmartRoot (Hanriver)',
-                desc: 'Farm management with IoT ingestion & real-time insights dashboards.',
-                stack: ['Java', 'Spring Boot', 'Containers'],
+                desc: 'IoT-enabled farm management with real-time insights.',
+                stack: ['Java','Spring Boot','Containers'],
               },
               {
                 name: 'MFS Bulk Payment',
-                desc: 'High-performance, secure payment processing for financial institutions.',
-                stack: ['Spring Boot', 'Hibernate', 'MySQL'],
+                desc: 'High-performance, secure bulk payment processing.',
+                stack: ['Spring Boot','Hibernate','MySQL'],
               },
             ].map((p) => (
               <div key={p.name} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">

@@ -11,7 +11,7 @@ const grotesk = Space_Grotesk({
   display: 'swap',
 });
 
-/** Inline SVGs so there’s no external image loading risk */
+/** Inline SVGs (no external fetch) */
 const SpringLogo: FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 256 256" className={className} role="img" aria-label="Spring">
     <defs>
@@ -87,7 +87,7 @@ const About: FC = () => {
         <title>About — Shreenidhi</title>
         <meta
           name="description"
-          content="About Shreenidhi M C — Backend Software Engineer (Java, Spring Boot). Skills, education, experience, and projects."
+          content="About Shreenidhi M C — Senior Backend Engineer (Java, Spring Boot). Skills, education, experience, and projects."
         />
       </Head>
 
@@ -109,7 +109,7 @@ const About: FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-900/70 to-black/85" />
         </div>
 
-        {/* Mouse-follow glare */}
+        {/* Mouse-follow glare (set by /pro/professional) */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10"
@@ -129,7 +129,6 @@ const About: FC = () => {
           <nav className="hidden gap-6 md:flex">
             <Link href="/pro/professional" className="hover:opacity-80">Home</Link>
             <Link href="/pro/about" className="hover:opacity-80">About</Link>
-            {/* Contact removed */}
           </nav>
           <a
             href="/image/shreenidhi.pdf"
@@ -147,19 +146,19 @@ const About: FC = () => {
               <div>
                 <h1 className="text-4xl font-bold leading-tight md:text-5xl">About Me</h1>
                 <p className="mt-4 max-w-prose text-white/85">
-                  I’m <span className="font-semibold text-white">Shreenidhi M C</span>, a backend engineer focused on
+                  I’m <span className="font-semibold text-white">Shreenidhi M C</span>, a senior backend engineer focused on
                   <span className="mx-1 rounded-lg border border-white/15 bg-white/10 px-2 py-0.5">Java</span>
                   and
                   <span className="mx-1 rounded-lg border border-white/15 bg-white/10 px-2 py-0.5">Spring Boot</span>.
-                  I care about clean API design, security that’s actually enforced, and apps that don’t fall over on a Monday morning.
-                  Dockerized, observable, and production-minded from day one.
+                  I keep APIs clean, authentication solid, and deployments boringly reliable. Dockerized, observable,
+                  and production-minded from day one.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   {[
-                    'Java', 'Spring Boot', 'Spring Security', 'REST APIs',
-                    'JPA/Hibernate', 'PostgreSQL', 'MySQL', 'MongoDB',
-                    'Docker', 'CI/CD', 'Caching', 'Resilience'
+                    'Java','Spring Boot','Spring Security','REST APIs',
+                    'JPA/Hibernate','PostgreSQL','MySQL','MongoDB',
+                    'Docker','CI/CD','FastAPI','Microservices'
                   ].map((s) => (
                     <span key={s} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-white/80">
                       {s}
@@ -168,7 +167,6 @@ const About: FC = () => {
                 </div>
               </div>
 
-              {/* Two-logo grid (inline SVGs, no external fetch) */}
               <LogoGrid />
             </div>
           </div>
@@ -188,7 +186,7 @@ const About: FC = () => {
               <h2 className="text-xl font-semibold">Frameworks & Tech</h2>
               <ul className="mt-3 list-disc space-y-1 pl-5 text-white/80">
                 <li>Spring Boot, Spring MVC, Spring Security, JPA/Hibernate</li>
-                <li>Servlets, RESTful APIs</li>
+                <li>RESTful APIs, Servlets</li>
                 <li>FastAPI</li>
               </ul>
             </div>
@@ -202,14 +200,14 @@ const About: FC = () => {
           </div>
         </section>
 
-        {/* Education */}
+        {/* Education (updated) */}
         <section className="mx-auto w-full max-w-7xl px-6 py-6">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
             <h2 className="text-2xl font-bold">Education</h2>
             <div className="mt-4 grid gap-5 md:grid-cols-2">
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                <h3 className="text-lg font-semibold">B.E. in Computer Science</h3>
-                <p className="text-white/80">Visvesvaraya Technological University, 2020</p>
+                <h3 className="text-lg font-semibold">B.E. in Information Science</h3>
+                <p className="text-white/80">RNS Institute of Technology (RNSIT), 2020</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <h3 className="text-lg font-semibold">Diploma in Computer Science</h3>
@@ -219,22 +217,37 @@ const About: FC = () => {
           </div>
         </section>
 
-        {/* Experience */}
+        {/* Work Experience (updated) */}
         <section className="mx-auto w-full max-w-7xl px-6 py-6">
           <h2 className="text-2xl font-bold">Work Experience</h2>
           <div className="mt-6 space-y-6">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
               <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                 <div>
-                  <h3 className="text-lg font-semibold">Software Engineer — Hanriver, Kolkata</h3>
-                  <p className="text-white/70">May 2023 – Present</p>
+                  <h3 className="text-lg font-semibold">Senior Software Engineer — Flycatch Tech</h3>
+                  <p className="text-white/70">Aug 2024 – Present</p>
                 </div>
-                <div className="text-white/80">Java • Spring Boot • Docker • PostgreSQL • MySQL</div>
+                <div className="text-white/80">Java • Spring Boot • MySQL • Docker</div>
               </div>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
-                <li>Lead developer on SmartFarm & SmartRoot; shipped scalable, secure backend services.</li>
-                <li>Hardened auth with Spring Security; implemented session/JWT flows and strict policies.</li>
-                <li>~20% faster responses via query tuning, indices, and pragmatic caching.</li>
+                <li>Backends for AwayTogether and a reusable Authentication Core.</li>
+                <li>Built tools (jukebox, activity scheduler) to boost guest engagement.</li>
+                <li>Service migration to Strapi CMS for consistent API design.</li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">Software Engineer — Hanriver, Kolkata</h3>
+                  <p className="text-white/70">May 2023 – Jul 2024</p>
+                </div>
+                <div className="text-white/80">Java • Spring Boot • Docker • PostgreSQL</div>
+              </div>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
+                <li>Led SmartFarm (vertical farm ERP) and SmartRoot (IoT platform).</li>
+                <li>Implemented SSO with Spring Security across farm apps.</li>
+                <li>~20% faster API responses via tuning & caching.</li>
               </ul>
             </div>
 
@@ -244,36 +257,46 @@ const About: FC = () => {
                   <h3 className="text-lg font-semibold">Backend Developer — Kingston Info Solution Services</h3>
                   <p className="text-white/70">Apr 2020 – Apr 2023</p>
                 </div>
-                <div className="text-white/80">Java • Spring Boot • Hibernate • Payments</div>
+                <div className="text-white/80">Java • Spring Boot • Hibernate • MySQL</div>
               </div>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-white/80">
-                <li>Built the MFS Bulk Payment system for secure, high-volume transactions.</li>
-                <li>Structured logging (AOP + Log4J) for traceability and faster incident response.</li>
-                <li>Cross-team collaboration to deliver robust API contracts and stable releases.</li>
+                <li>MFS Bulk Payment for secure, high-volume financial transactions.</li>
+                <li>Structured logging with AOP + Log4J for traceability.</li>
+                <li>Optimized queries + caching cut bulk processing time ~15%.</li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* Projects */}
+        {/* Projects (updated) */}
         <section className="mx-auto w-full max-w-7xl px-6 py-6">
           <h2 className="text-2xl font-bold">Projects</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {[
               {
-                name: 'SmartFarm (Hanriver)',
-                desc: 'Routing & task management platform for farm services. Strong scheduling & reliability focus.',
-                stack: ['Spring Boot', 'PostgreSQL', 'Docker'],
+                name: 'AwayTogether – Flycatch Tech',
+                desc: 'Hotel management platform built with Spring Boot, MySQL, Docker.',
+                stack: ['Spring Boot','MySQL','Docker'],
               },
               {
-                name: 'SmartRoot (Hanriver)',
-                desc: 'Farm management with IoT ingestion and real-time insights dashboards.',
-                stack: ['Java', 'Spring Boot', 'Containers'],
+                name: 'Authentication Core – Flycatch Tech',
+                desc: 'Reusable authentication module (JWT/Session) for multiple Spring apps.',
+                stack: ['Java','Spring Security','JWT/Session'],
+              },
+              {
+                name: 'SmartFarm – Hanriver',
+                desc: 'Task routing & scheduling for smart farms.',
+                stack: ['Spring Boot','PostgreSQL','Docker'],
+              },
+              {
+                name: 'SmartRoot – Hanriver',
+                desc: 'IoT-enabled farm management with real-time analytics.',
+                stack: ['Java','Spring Boot','Containers'],
               },
               {
                 name: 'MFS Bulk Payment',
-                desc: 'High-performance, secure payment processing for financial institutions.',
-                stack: ['Spring Boot', 'Hibernate', 'MySQL'],
+                desc: 'Secure, high-performance bulk payments.',
+                stack: ['Spring Boot','Hibernate','MySQL'],
               },
             ].map((p) => (
               <div key={p.name} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">

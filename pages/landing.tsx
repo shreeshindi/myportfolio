@@ -2,25 +2,21 @@
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import Modal from '../components/Modal';
+import SwipeOverlay from '@/components/SwipeOverlay';
+import MobileSwipeNav from '@/components/MobileSwipeNav';   // <-- ADD
 
 // Cursor (scoped)
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
-
-// If you want mobile peekers later, import and render them here
-// import MobilePeekers from '@/components/MobilePeekers';
 
 function useIsMobileOrTablet(): boolean {
   const [isMob, setIsMob] = useState(false);
   useEffect(() => {
     const q1 = window.matchMedia('(pointer: coarse)');
     const q2 = window.matchMedia('(max-width: 1024px)');
-
     const update = () => setIsMob(q1.matches || q2.matches);
     update();
-
     const onChange = () => update();
-
     if ((q1 as any).addEventListener) {
       q1.addEventListener('change', onChange);
       q2.addEventListener('change', onChange);
@@ -59,16 +55,13 @@ const Landing = () => {
         paragraphs.forEach((p) => {
           const chars = p.textContent!.split('');
           p.innerHTML = '';
-
           chars.forEach((char) => {
             const span = document.createElement('span');
             span.textContent = char;
             p.appendChild(span);
           });
-
           const spans = p.querySelectorAll('span');
           gsap.set(spans, { opacity: 0 });
-
           gsap.to(spans, {
             opacity: 1,
             duration: 0.05,
@@ -101,19 +94,23 @@ const Landing = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
-  }, [isModalOpen]);
+    document.body.style.overflow = (!isMobile && isModalOpen) ? 'hidden' : 'auto';
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [isMobile, isModalOpen]);
 
   return (
     <div className={cursorStyles.scope}>
       <ServerCursor />
 
-      {/* MOBILE/TABLET ONLY: Peekers (left empty by your last code) */}
-      {/* {isMobile && <MobilePeekers images={[...]} fallback="/image/shin.png" />} */}
+      {/* MOBILE: full-screen gate + persistent left-swipe nav */}
+      {isMobile && <SwipeOverlay />}
+      {isMobile && <MobileSwipeNav />}
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} />
+      {/* DESKTOP: keep existing popup */}
+      {!isMobile && <Modal isOpen={isModalOpen} onClose={closeModal} />}
 
       <div
+        id="landing"
         ref={bgRef}
         className="min-h-screen w-full bg-cover bg-center flex flex-col justify-start items-center pt-16 relative"
         style={{
@@ -123,18 +120,14 @@ const Landing = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* darker overlay; pointer-events none so it never blocks touches */}
         <div className="absolute inset-0 bg-black/60 pointer-events-none"></div>
 
-        <Head>
-          <title>Shreenidhi</title>
-        </Head>
+        <Head><title>Shreenidhi</title></Head>
 
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
           <div className="scrolldown"></div>
         </div>
 
-        {/* Force white text on top of dark bg for ALL devices */}
         <div className="text-center mt-12 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 z-10 text-white">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-shadow">
             Are you looking for a good backend developer?

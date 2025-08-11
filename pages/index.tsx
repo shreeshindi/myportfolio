@@ -11,21 +11,18 @@ import { useRouter } from 'next/router';
 import ServerCursor from '@/components/ServerCursor';
 import cursorStyles from '@/styles/ServerCursor.module.css';
 
-// NEW: mobile peekers
+// MOBILE peekers + global left-swipe nav
 import MobilePeekers from '@/components/MobilePeekers';
+import MobileSwipeNav from '@/components/MobileSwipeNav';  // <-- ADD
 
 function useIsMobileOrTablet(): boolean {
   const [isMob, setIsMob] = useState(false);
   useEffect(() => {
     const q1 = window.matchMedia('(pointer: coarse)');
     const q2 = window.matchMedia('(max-width: 1024px)');
-
     const update = () => setIsMob(q1.matches || q2.matches);
     update();
-
     const onChange = () => update();
-
-    // Safari fallback
     if ((q1 as any).addEventListener) {
       q1.addEventListener('change', onChange);
       q2.addEventListener('change', onChange);
@@ -54,7 +51,7 @@ const Home = () => {
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } = 'touches' in event ? event.touches[0] : event;
+      const { clientX, clientY } = 'touches' in event ? event.touches[0] : (event as MouseEvent);
       const button = document.getElementById('bonkers-button');
       if (button) {
         const rect = button.getBoundingClientRect();
@@ -69,8 +66,7 @@ const Home = () => {
     };
 
     document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove, { passive: true } as any);
-
+    document.addEventListener('touchmove', handleMove as any, { passive: true } as any);
     return () => {
       document.removeEventListener('mousemove', handleMove);
       document.removeEventListener('touchmove', handleMove as any);
@@ -83,20 +79,22 @@ const Home = () => {
   const handleHireMeClick = () => router.push('/hire-me');
 
   return (
-    // Cursor scope only for this page
     <div className={cursorStyles.scope}>
       <ServerCursor />
 
-      <Head>
-        <title>My Portfolio</title>
-      </Head>
+      <Head><title>My Portfolio</title></Head>
 
+      {/* Make left-swipe to Professional work anywhere on / */}
+      {isMobile && <MobileSwipeNav />}
+
+      {/* Top landing (kept as-is) */}
       <div id="landing" className={`min-h-screen ${showGif ? 'hidden' : ''}`}>
         <Landing />
       </div>
 
+      {/* FUN SECTION — anchor for SwipeOverlay's "Swipe Up" */}
       <div
-        id="home"
+        id="fun"
         className={`min-h-screen bg-gray-100 relative flex flex-col justify-center items-center ${showGif ? 'hidden' : ''}`}
         style={{
           backgroundImage: "url('/image/p2.jpg')",
@@ -129,20 +127,19 @@ const Home = () => {
 
         {/* MOBILE/TABLET ONLY: Peekers that slide in/out on scroll */}
         {isMobile && (
-  <MobilePeekers
-    images={[
-      "/image/onep.png",
-      "/image/shin.png",
-      "/image/bean.png",
-      "/image/inos.png",
-      "/image/batm.png",
-      // add as many as you want; picked at random each peek
-    ]}
-    fallback="/image/shin.png"
-    peekDurationMs={1200}          // optional tune
-    scrollSpeedThreshold={0.22}    // optional tune
-  />
-)}
+          <MobilePeekers
+            images={[
+              "/image/onep.png",
+              "/image/shin.png",
+              "/image/bean.png",
+              "/image/inos.png",
+              "/image/batm.png",
+            ]}
+            fallback="/image/shin.png"
+            peekDurationMs={1200}
+            scrollSpeedThreshold={0.22}
+          />
+        )}
 
         <div className="flex justify-center items-center space-x-4 relative z-10 mb-4" />
 

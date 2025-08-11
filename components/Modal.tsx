@@ -1,3 +1,4 @@
+// components/Modal.tsx
 import { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -19,7 +20,7 @@ const gifs = [
 const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [showUnderConstruction, setShowUnderConstruction] = useState(false);
+  const [showUnderConstruction] = useState(false);
   const [selectedGif, setSelectedGif] = useState('');
 
   useEffect(() => {
@@ -35,15 +36,14 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
     }
-
     return () => {
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-//https://robertozaccardi.dev/
+
   const handleRedirectToProfessional = () => {
-    router.push('/pro/professional'); // Replace with the path to your professional page
+    router.push('/pro/professional');
   };
 
   const handleShowConfirmation = () => {
@@ -105,4 +105,3 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose }) => {
 };
 
 export default Modal;
-

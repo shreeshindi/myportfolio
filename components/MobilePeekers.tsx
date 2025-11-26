@@ -82,8 +82,9 @@ export default function MobilePeekers({
   useEffect(() => {
     lastY.current = window.scrollY;
     lastT.current = performance.now();
+    let ticking = false;
 
-    const onScroll = () => {
+    const update = () => {
       const y = window.scrollY;
       const now = performance.now();
       const dy = Math.abs(y - lastY.current);
@@ -96,6 +97,14 @@ export default function MobilePeekers({
       if (v > scrollSpeedThreshold && !animating.current) {
         const side: Side = Math.random() < 0.5 ? "left" : "right";
         triggerPeek(side);
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
       }
     };
 

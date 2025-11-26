@@ -55,13 +55,22 @@ export default function TiltCard({ selectedImage, theme, isCoarse, motionAllowed
         const tiltEl = tiltRef.current;
         if (!tiltEl) return;
 
-        const handler = (e: DeviceOrientationEvent) => {
-            const beta = e.beta ?? 0;   // front/back
-            const gamma = e.gamma ?? 0; // left/right
+        let ticking = false;
+        const update = (beta: number, gamma: number) => {
             const rotateX = Math.max(-10, Math.min(10, -(beta / 90) * 10));
             const rotateY = Math.max(-12, Math.min(12, (gamma / 60) * 12));
             tiltEl.style.transform =
                 `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
+            ticking = false;
+        };
+
+        const handler = (e: DeviceOrientationEvent) => {
+            if (!ticking) {
+                const beta = e.beta ?? 0;
+                const gamma = e.gamma ?? 0;
+                window.requestAnimationFrame(() => update(beta, gamma));
+                ticking = true;
+            }
         };
 
         window.addEventListener('deviceorientation', handler, true);

@@ -8,6 +8,24 @@ const LandingSection = () => {
 
   useEffect(() => {
     const run = async () => {
+      // Check if mobile
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+      if (isMobile) {
+        // Mobile: Use CSS animation (lighter)
+        if (textRef.current) {
+          const paragraphs = textRef.current.querySelectorAll('p');
+          paragraphs.forEach((p, index) => {
+            p.classList.add('mobile-fade-in');
+            // Add staggered delay via inline style
+            p.style.animationDelay = `${index * 0.2}s`;
+            p.style.opacity = '0'; // Start hidden
+          });
+        }
+        return; // Skip GSAP entirely for text on mobile
+      }
+
+      // Desktop: Load GSAP
       const { default: gsap } = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       gsap.registerPlugin(ScrollTrigger);
@@ -39,8 +57,7 @@ const LandingSection = () => {
       }
 
       if (bgRef.current) {
-        const { default: gsap2 } = await import('gsap');
-        gsap2.to(bgRef.current, {
+        gsap.to(bgRef.current, {
           y: '60%',
           ease: 'none',
           scrollTrigger: {
@@ -94,7 +111,7 @@ const LandingSection = () => {
         </div>
       </div>
 
-      <div style={{ paddingBottom: '40rem' }}></div>
+      <div className="pb-32 md:pb-[40rem]"></div>
     </div>
   );
 };

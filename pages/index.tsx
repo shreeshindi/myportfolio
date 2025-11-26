@@ -46,6 +46,10 @@ const Home = () => {
   }, [isMobile, isModalOpen]);
 
   useEffect(() => {
+    // Optimization: Don't attach these listeners on mobile.
+    // The 'bonkers-button' proximity logic is only used for the desktop layout.
+    if (isMobile) return;
+
     const handleMove = (event: MouseEvent | TouchEvent) => {
       let clientX, clientY;
       if ('touches' in event) {
@@ -69,12 +73,14 @@ const Home = () => {
     };
 
     document.addEventListener('mousemove', handleMove);
+    // We don't need touchmove on desktop usually, but if it's a hybrid device, we might.
+    // However, since we explicitly return if isMobile is true, this is safe.
     document.addEventListener('touchmove', handleMove, { passive: true });
     return () => {
       document.removeEventListener('mousemove', handleMove);
       document.removeEventListener('touchmove', handleMove);
     };
-  }, []);
+  }, [isMobile]);
 
   const handleMouseEnter = () => setIsButtonHovered(true);
   const handleMouseLeave = () => setIsButtonHovered(false);

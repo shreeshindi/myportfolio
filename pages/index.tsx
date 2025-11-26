@@ -20,33 +20,7 @@ import Modal from '../components/Modal';
 
 // Shared landing section (holds #landing and #landing-start)
 import LandingSection from '@/components/LandingSection';
-
-function useIsMobileOrTablet(): boolean {
-  const [isMob, setIsMob] = useState(false);
-  useEffect(() => {
-    const q1 = window.matchMedia('(pointer: coarse)');
-    const q2 = window.matchMedia('(max-width: 1024px)');
-    const update = () => setIsMob(q1.matches || q2.matches);
-    update();
-    const onChange = () => update();
-    if ((q1 as any).addEventListener) {
-      q1.addEventListener('change', onChange);
-      q2.addEventListener('change', onChange);
-      return () => {
-        q1.removeEventListener('change', onChange);
-        q2.removeEventListener('change', onChange);
-      };
-    } else {
-      q1.addListener(onChange);
-      q2.addListener(onChange);
-      return () => {
-        q1.removeListener(onChange);
-        q2.removeListener(onChange);
-      };
-    }
-  }, []);
-  return isMob;
-}
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const Home = () => {
   const [isNearButton, setIsNearButton] = useState(false);
@@ -57,7 +31,7 @@ const Home = () => {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const router = useRouter();
-  const isMobile = useIsMobileOrTablet();
+  const isMobile = useIsMobile();
 
   // Keep desktop page blocked while modal is open
   useEffect(() => {
@@ -73,8 +47,15 @@ const Home = () => {
 
   useEffect(() => {
     const handleMove = (event: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } =
-        'touches' in event ? event.touches[0] : (event as MouseEvent);
+      let clientX, clientY;
+      if ('touches' in event) {
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+      } else {
+        clientX = (event as MouseEvent).clientX;
+        clientY = (event as MouseEvent).clientY;
+      }
+
       const button = document.getElementById('bonkers-button');
       if (button) {
         const rect = button.getBoundingClientRect();
@@ -88,10 +69,10 @@ const Home = () => {
     };
 
     document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove as any, { passive: true } as any);
+    document.addEventListener('touchmove', handleMove, { passive: true });
     return () => {
       document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('touchmove', handleMove as any);
+      document.removeEventListener('touchmove', handleMove);
     };
   }, []);
 
@@ -182,6 +163,7 @@ const Home = () => {
                 frameBorder={0}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                title="Mobile Video"
               />
             </div>
 
@@ -222,6 +204,7 @@ const Home = () => {
                 frameBorder={0}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                title="Desktop Video"
               />
             )}
 

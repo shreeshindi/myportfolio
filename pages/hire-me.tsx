@@ -1,8 +1,12 @@
 // pages/hire-me.tsx
 import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import TiltCard from '@/components/TiltCard';
+import GlitchTitle from '@/components/GlitchTitle';
+import ParticleBackground from '@/components/ParticleBackground';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useMotionPermission } from '@/hooks/useMotionPermission';
+import { useMousePosition } from '@/hooks/useMousePosition';
 
 type Theme = {
   name: string;
@@ -44,36 +48,17 @@ const THEMES: Theme[] = [
 ];
 
 const HEADLINES = ['CONNECT', 'SAY HI', 'PING ME', "LET'S TALK", 'YO!'];
-const EMOJIS = ['✨', '⚡', '💥', '🔥', '💫', '🫶', '🚀', '🎯', '🌈', '🧩', '🫡'];
-
-const isIOS = () => {
-  if (typeof navigator === 'undefined') return false;
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.userAgent.includes('Mac') && typeof document !== 'undefined' && 'ontouchend' in document);
-};
 
 const HireMe = () => {
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [headline, setHeadline] = useState<string>('CONNECT');
   const [theme, setTheme] = useState<Theme>(THEMES[0]);
 
-  const [isCoarse, setIsCoarse] = useState<boolean>(false);
+  const isCoarse = useIsMobile();
+  const { motionAllowed, requestIOSMotion, isIOS } = useMotionPermission(isCoarse);
+  const { cursorRef, cursorInnerRef, cursorVariant, cursorEmoji } = useMousePosition(isCoarse);
 
-  // Motion permission state for mobile
-  const [motionAllowed, setMotionAllowed] = useState<boolean>(false);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const tiltRef = useRef<HTMLDivElement>(null);
-  const btnRef = useRef<HTMLAnchorElement>(null);
-  const glitchTimer = useRef<number | null>(null);
-
-  // Desktop-only custom cursor
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const cursorInnerRef = useRef<HTMLDivElement>(null);
-  const [cursorVariant, setCursorVariant] = useState<'emoji' | 'dot' | 'ring' | 'blob'>('emoji');
-  const [cursorEmoji, setCursorEmoji] = useState<string>('🚀');
-
-  // ---------- Randomize + pointer detection ----------
+  // ---------- Randomize ----------
   useEffect(() => {
     const images = [
       '/image/dev1.webp',
@@ -85,282 +70,6 @@ const HireMe = () => {
     setSelectedImage(images[Math.floor(Math.random() * images.length)]);
     setHeadline(HEADLINES[Math.floor(Math.random() * HEADLINES.length)]);
     setTheme(THEMES[Math.floor(Math.random() * THEMES.length)]);
-
-    const mql = window.matchMedia('(pointer: coarse)');
-    const setMode = () => setIsCoarse(mql.matches);
-    setMode();
-    mql.addEventListener?.('change', setMode);
-
-    // Desktop cursor variant/emoji
-    if (!mql.matches) {
-      const variants: Array<'emoji' | 'dot' | 'ring' | 'blob'> = ['emoji', 'dot', 'ring', 'blob'];
-      setCursorVariant(variants[Math.floor(Math.random() * variants.length)]);
-      setCursorEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
-    }
-
-    return () => { mql.removeEventListener?.('change', setMode); };
-  }, []);
-
-  // ---------- Desktop cursor follow + emoji trail ----------
-  useEffect(() => {
-    if (isCoarse) return;
-    const cur = cursorRef.current;
-    if (!cur) return;
-
-    let targetX = 0, targetY = 0;
-    let x = 0, y = 0;
-    let raf = 0;
-
-    const onMove = (e: MouseEvent) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      spawnEmoji(e.clientX, e.clientY, 0.9, true);
-    };
-
-    const loop = () => {
-      x += (targetX - x) * 0.18;
-      y += (targetY - y) * 0.18;
-      cur.style.transform = `translate(${x}px, ${y}px)`;
-      raf = requestAnimationFrame(loop);
-    };
-    loop();
-
-    const onDown = () => cur.classList.add('cursor-click');
-    const onUp = () => cur.classList.remove('cursor-click');
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup', onUp);
-    };
-  }, [isCoarse]);
-
-  // ---------- Desktop cursor "hot" over interactives ----------
-  useEffect(() => {
-    if (isCoarse) return;
-    const onOver = (e: MouseEvent) => {
-      const t = e.target as HTMLElement | null;
-      if (!t) return;
-      const isInteractive = t.closest('a, button, [data-cursor="link"]');
-      const inner = cursorInnerRef.current;
-      if (!inner) return;
-      if (isInteractive) inner.classList.add('cursor-hot');
-      else inner.classList.remove('cursor-hot');
-    };
-    window.addEventListener('mousemove', onOver);
-    return () => window.removeEventListener('mousemove', onOver);
-  }, [isCoarse]);
-
-  // ---------- DESKTOP tilt (mouse) ----------
-  useEffect(() => {
-    if (isCoarse) return;
-    const tiltEl = tiltRef.current;
-    if (!tiltEl) return;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = tiltEl.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / rect.width;
-      const dy = (e.clientY - cy) / rect.height;
-      const rotateX = (dy * -10).toFixed(2);
-      const rotateY = (dx * 12).toFixed(2);
-      tiltEl.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-    };
-    const onLeave = () => {
-      tiltEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
-    };
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseleave', onLeave);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseleave', onLeave);
-    };
-  }, [isCoarse]);
-
-  // ---------- MOBILE motion: auto-allow if no permission API ----------
-  useEffect(() => {
-    if (!isCoarse) return;
-    const needPerm = typeof (DeviceOrientationEvent as any)?.requestPermission === 'function';
-    if (!needPerm) {
-      // Android / browsers that don't require explicit permission
-      setMotionAllowed(true);
-    }
-  }, [isCoarse]);
-
-  // ---------- MOBILE tilt (deviceorientation) when allowed ----------
-  useEffect(() => {
-    if (!isCoarse || !motionAllowed) return;
-    const tiltEl = tiltRef.current;
-    if (!tiltEl) return;
-
-    const handler = (e: DeviceOrientationEvent) => {
-      const beta = e.beta ?? 0;   // front/back
-      const gamma = e.gamma ?? 0; // left/right
-      const rotateX = Math.max(-10, Math.min(10, -(beta / 90) * 10));
-      const rotateY = Math.max(-12, Math.min(12, (gamma / 60) * 12));
-      tiltEl.style.transform =
-        `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
-    };
-
-    window.addEventListener('deviceorientation', handler, true);
-    return () => window.removeEventListener('deviceorientation', handler, true);
-  }, [isCoarse, motionAllowed]);
-
-  // ---------- MOBILE fallback: touch-move tilt if motion not allowed ----------
-  useEffect(() => {
-    if (!isCoarse || motionAllowed) return;
-    const tiltEl = tiltRef.current;
-    if (!tiltEl) return;
-
-    const onTouchMove = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (!t) return;
-      const rect = tiltEl.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (t.clientX - cx) / rect.width;
-      const dy = (t.clientY - cy) / rect.height;
-      const rotateX = (dy * -10);
-      const rotateY = (dx * 12);
-      tiltEl.style.transform =
-        `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
-    };
-    const onTouchEnd = () => {
-      tiltEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
-    };
-
-    tiltEl.addEventListener('touchmove', onTouchMove, { passive: true });
-    tiltEl.addEventListener('touchend', onTouchEnd, { passive: true });
-    tiltEl.addEventListener('touchcancel', onTouchEnd, { passive: true });
-
-    return () => {
-      tiltEl.removeEventListener('touchmove', onTouchMove as any);
-      tiltEl.removeEventListener('touchend', onTouchEnd as any);
-      tiltEl.removeEventListener('touchcancel', onTouchEnd as any);
-    };
-  }, [isCoarse, motionAllowed]);
-
-  // iOS: explicit permission
-  const requestIOSMotion = async () => {
-    try {
-      const req = (DeviceOrientationEvent as any)?.requestPermission;
-      if (typeof req === 'function') {
-        const perm = await req();
-        if (perm === 'granted') setMotionAllowed(true);
-      }
-    } catch {
-      setMotionAllowed(false);
-    }
-  };
-
-  // ---------- Glitch headline ----------
-  useEffect(() => {
-    const el = document.getElementById('glitchTitle');
-    if (!el) return;
-
-    const runGlitch = () => {
-      el.classList.add('glitch');
-      window.setTimeout(() => el.classList.remove('glitch'), 600);
-    };
-    const schedule = () => {
-      glitchTimer.current = window.setTimeout(() => {
-        runGlitch();
-        schedule();
-      }, 3000 + Math.random() * 4000);
-    };
-    schedule();
-    return () => { if (glitchTimer.current) window.clearTimeout(glitchTimer.current); };
-  }, []);
-
-  // ---------- Mobile particles + tap confetti ----------
-  useEffect(() => {
-    if (!isCoarse) return;
-    let alive = true;
-
-    const spawnIdle = () => {
-      if (!alive) return;
-      const x = Math.random() * window.innerWidth;
-      const y = window.innerHeight - 20 - Math.random() * 80;
-      spawnEmoji(x, y, 0.6, false, true);
-      window.setTimeout(spawnIdle, 600 + Math.random() * 1000);
-    };
-    spawnIdle();
-
-    const onTouch = (e: TouchEvent) => {
-      const touches = Array.from(e.touches);
-      touches.forEach((t) => {
-        for (let i = 0; i < 10; i++) spawnEmoji(t.clientX, t.clientY, 1, false);
-      });
-    };
-    window.addEventListener('touchstart', onTouch, { passive: true });
-
-    return () => {
-      alive = false;
-      window.removeEventListener('touchstart', onTouch);
-    };
-  }, [isCoarse]);
-
-  // Create + animate a floating emoji
-  const spawnEmoji = (
-    x: number, y: number,
-    opacity = 0.9, desktopLight = false, idle = false
-  ) => {
-    const span = document.createElement('span');
-    span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-    span.style.position = 'fixed';
-    span.style.left = x + 'px';
-    span.style.top = y + 'px';
-    span.style.pointerEvents = 'none';
-    span.style.zIndex = '50';
-    span.style.fontSize = (idle ? 12 : 12 + Math.floor(Math.random() * 16)) + 'px';
-    span.style.opacity = String(opacity);
-    span.style.transform = `translate(-50%, -50%) scale(${idle ? 0.9 : 0.8 + Math.random() * 0.6})`;
-    const driftX = (Math.random() - 0.5) * (idle ? 60 : 160);
-    const driftY = idle ? -(40 + Math.random() * 40) : -80 - Math.random() * 80;
-    const rotate = (Math.random() - 0.5) * (idle ? 30 : 90);
-
-    document.body.appendChild(span);
-    const duration = desktopLight ? 500 + Math.random() * 600 : 900 + Math.random() * 900;
-
-    if ((span as any).animate) {
-      (span as any)
-        .animate(
-          [
-            { transform: span.style.transform, opacity: opacity },
-            { transform: `translate(calc(-50% + ${driftX}px), calc(-50% + ${driftY}px)) rotate(${rotate}deg)`, opacity: 0 },
-          ],
-          { duration, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }
-        )
-        .finished.finally(() => span.remove());
-    } else {
-      setTimeout(() => span.remove(), duration);
-    }
-  };
-
-  // ---------- Magnetic button (desktop hover only) ----------
-  useEffect(() => {
-    const anchor = btnRef.current;
-    if (!anchor) return;
-    const onMove = (e: MouseEvent) => {
-      const rect = anchor.getBoundingClientRect();
-      const dx = e.clientX - (rect.left + rect.width / 2);
-      const dy = e.clientY - (rect.top + rect.height / 2);
-      anchor.style.transform = `translate(${dx * 0.08}px, ${dy * 0.08}px) scale(1.02)`;
-    };
-    const onLeave = () => { anchor.style.transform = 'translate(0,0) scale(1)'; };
-    anchor.addEventListener('mousemove', onMove);
-    anchor.addEventListener('mouseleave', onLeave);
-    return () => {
-      anchor.removeEventListener('mousemove', onMove);
-      anchor.removeEventListener('mouseleave', onLeave);
-    };
   }, []);
 
   const containerStyle = useMemo<React.CSSProperties>(() => ({}), []);
@@ -368,7 +77,6 @@ const HireMe = () => {
   return (
     <div
       id="hireme-root"
-      ref={containerRef}
       className={`min-h-screen ${theme.bgClass} relative overflow-hidden text-white hireme-root`}
       style={containerStyle}
     >
@@ -389,87 +97,32 @@ const HireMe = () => {
 
       {/* Content: safe-area padding so it doesn't touch top/bottom on phones */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 safe-py">
-        {/* Headline with glitch */}
-        <h1
-          id="glitchTitle"
-          className="select-none text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)]"
-          onMouseEnter={() => {
-            const el = document.getElementById('glitchTitle');
-            if (!el) return;
-            el.classList.add('glitch');
-            setTimeout(() => el.classList.remove('glitch'), 600);
-          }}
-        >
-          {headline}
-        </h1>
+
+        <GlitchTitle headline={headline} />
 
         {/* iOS motion permission button (only when needed) */}
-        {isCoarse && isIOS() &&
+        {isCoarse && isIOS &&
           !motionAllowed &&
           typeof (DeviceOrientationEvent as any)?.requestPermission === 'function' && (
-          <button
-            onClick={requestIOSMotion}
-            className="mt-5 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm backdrop-blur hover:bg-white/20 transition"
-          >
-            Enable Motion
-          </button>
-        )}
-
-        {/* Hero card with tilt */}
-        <div
-          ref={tiltRef}
-          className="mt-8 w-full max-w-3xl rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl shadow-2xl transition-transform duration-200 will-change-transform"
-        >
-          <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-white/10">
-            {selectedImage && (
-              <Image
-                src={selectedImage}
-                alt="Dev visual"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 768px"
-                priority
-              />
-            )}
-
-            {/* corner badges */}
-            <div className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/50 px-3 py-1 text-[10px] sm:text-xs">
-              random: true
-            </div>
-            <div className="pointer-events-none absolute right-3 bottom-3 rounded-full bg-black/50 px-3 py-1 text-[10px] sm:text-xs">
-              theme: {theme.name}
-            </div>
-          </div>
-
-          <p className="mt-5 text-center text-base sm:text-lg md:text-lg text-white/90">
-            I build backends that are fast, secure, and low-drama. If you need clean APIs, solid auth, and smooth
-            deployments — we’ll get along.
-          </p>
-
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              ref={btnRef}
-              href="/image/shreenidhi.pdf"
-              target="_blank"
-              download
-              data-cursor="link"
-              className={`rounded-xl px-5 py-3 ${theme.buttonClass} ${theme.buttonHoverClass} transition-all duration-200 active:scale-[0.98]`}
+            <button
+              onClick={requestIOSMotion}
+              className="mt-5 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm backdrop-blur hover:bg-white/20 transition"
             >
-              Download Resume
-            </a>
+              Enable Motion
+            </button>
+          )}
 
-            <Link
-              href="/pro/professional"
-              data-cursor="link"
-              className="rounded-xl border border-white/25 bg-white/10 px-5 py-3 backdrop-blur hover:bg-white/20 transition-all"
-            >
-              See Work
-            </Link>
-          </div>
-        </div>
+        <TiltCard
+          selectedImage={selectedImage}
+          theme={theme}
+          isCoarse={isCoarse}
+          motionAllowed={motionAllowed}
+        />
 
         <p className="mt-8 text-sm text-white/80">Tip: Reload — the vibe changes each time.</p>
       </div>
+
+      <ParticleBackground isCoarse={isCoarse} />
 
       {/* Desktop-only custom cursor */}
       {!isCoarse && (

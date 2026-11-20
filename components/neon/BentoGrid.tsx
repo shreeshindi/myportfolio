@@ -1,4 +1,6 @@
 import { FC, ReactNode } from 'react';
+import Link from 'next/link';
+import { track } from '@vercel/analytics';
 import { profile } from '@/data/profile';
 import { Panel, PanelLabel } from './Panel';
 import { IconDownload, IconExternal, IconGitHub, IconLinkedIn, IconMail } from './Icons';
@@ -8,15 +10,19 @@ const chipClass =
 
 const Chip: FC<{ children: string }> = ({ children }) => <span className={chipClass}>{children}</span>;
 
-const CtaLink: FC<{ href: string; children: ReactNode; external?: boolean; accent?: boolean }> = ({
-  href,
-  children,
-  external,
-  accent,
-}) => (
+const CtaLink: FC<{
+  href: string;
+  children: ReactNode;
+  external?: boolean;
+  accent?: boolean;
+  event?: string;
+}> = ({ href, children, external, accent, event }) => (
   <a
     href={href}
     {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    onClick={() => {
+      if (event) track(event);
+    }}
     className={
       accent
         ? 'inline-flex items-center gap-2 border border-cyan-300/80 bg-cyan-400 px-3.5 py-2 text-xs text-canvas transition-colors hover:bg-cyan-300 md:text-sm'
@@ -41,19 +47,19 @@ export const BentoGrid: FC = () => {
           {profile.description}
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <CtaLink href={profile.resumePath} accent>
+          <CtaLink href={profile.resumePath} accent event="cta_resume">
             <IconDownload className="h-4 w-4" />
             Resume
           </CtaLink>
-          <CtaLink href={profile.links.github} external>
+          <CtaLink href={profile.links.github} external event="cta_github">
             <IconGitHub className="h-4 w-4" />
             GitHub
           </CtaLink>
-          <CtaLink href={profile.links.linkedin} external>
+          <CtaLink href={profile.links.linkedin} external event="cta_linkedin">
             <IconLinkedIn className="h-4 w-4" />
             LinkedIn
           </CtaLink>
-          <CtaLink href="#contact">
+          <CtaLink href="#contact" event="cta_contact">
             <IconMail className="h-4 w-4" />
             Contact
           </CtaLink>
@@ -187,6 +193,7 @@ export const BentoGrid: FC = () => {
                     href={c.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => track('cta_cert')}
                     className="text-neon underline-offset-2 hover:underline"
                   >
                     {c.name}
@@ -223,12 +230,20 @@ export const BentoGrid: FC = () => {
             </p>
             <div className="mt-5 space-y-2 text-sm">
               <p>
-                <a className="text-neon hover:underline" href={`mailto:${profile.contact.email}`}>
+                <a
+                  className="text-neon hover:underline"
+                  href={`mailto:${profile.contact.email}`}
+                  onClick={() => track('cta_email')}
+                >
                   {profile.contact.email}
                 </a>
               </p>
               <p>
-                <a className="text-neon hover:underline" href={profile.contact.phoneHref}>
+                <a
+                  className="text-neon hover:underline"
+                  href={profile.contact.phoneHref}
+                  onClick={() => track('cta_phone')}
+                >
                   {profile.contact.phone}
                 </a>
               </p>
@@ -238,6 +253,7 @@ export const BentoGrid: FC = () => {
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => track('cta_website')}
                 >
                   {profile.websiteLabel}
                   <IconExternal className="h-3.5 w-3.5" />
@@ -246,22 +262,32 @@ export const BentoGrid: FC = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <CtaLink href={profile.resumePath} accent>
+            <CtaLink href={profile.resumePath} accent event="cta_resume">
               <IconDownload className="h-4 w-4" />
               Download resume
             </CtaLink>
-            <CtaLink href={profile.links.github} external>
+            <CtaLink href={profile.links.github} external event="cta_github">
               <IconGitHub className="h-4 w-4" />
               GitHub
             </CtaLink>
-            <CtaLink href={profile.links.linkedin} external>
+            <CtaLink href={profile.links.linkedin} external event="cta_linkedin">
               <IconLinkedIn className="h-4 w-4" />
               LinkedIn
             </CtaLink>
           </div>
         </div>
-        <footer className="mt-10 border-t border-neon-border pt-4 text-[11px] text-neon-dim">
-          <span className="text-neon">$</span> {profile.fullName} — Neon Terminal · {new Date().getFullYear()}
+        <footer className="mt-10 flex flex-col gap-2 border-t border-neon-border pt-4 text-[11px] text-neon-dim sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            <span className="text-neon">$</span> {profile.fullName} — Neon Terminal · {new Date().getFullYear()}
+          </p>
+          <p className="flex gap-3">
+            <Link href="/privacy" className="hover:text-neon">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-neon">
+              Terms
+            </Link>
+          </p>
         </footer>
       </Panel>
     </div>

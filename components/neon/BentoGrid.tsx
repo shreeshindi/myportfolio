@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import Link from 'next/link';
 import { track } from '@vercel/analytics';
 import { profile } from '@/data/profile';
 import { Panel, PanelLabel } from './Panel';
@@ -275,8 +276,18 @@ export const BentoGrid: FC = () => {
             </CtaLink>
           </div>
         </div>
-        <footer className="mt-10 border-t border-neon-border pt-4 text-[11px] text-neon-dim">
-          <span className="text-neon">$</span> {profile.fullName} — Neon Terminal · {new Date().getFullYear()}
+        <footer className="mt-10 flex flex-col gap-2 border-t border-neon-border pt-4 text-[11px] text-neon-dim sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            <span className="text-neon">$</span> {profile.fullName} — Neon Terminal · {new Date().getFullYear()}
+          </p>
+          <p className="flex gap-3">
+            <Link href="/privacy" className="hover:text-neon">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-neon">
+              Terms
+            </Link>
+          </p>
         </footer>
       </Panel>
     </div>

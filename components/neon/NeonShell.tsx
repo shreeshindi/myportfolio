@@ -16,26 +16,26 @@ export const NeonShell: FC<NeonShellProps> = ({ children }) => {
       <header className="sticky top-0 z-30 border-b border-neon-border/60 bg-canvas/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <a
-            href="#top"
+            href="/#top"
             className="min-w-[11ch] font-display text-sm tracking-[0.2em] text-neon md:text-base"
             aria-label={profile.name}
           >
             <TypewriterText text={profile.name.toUpperCase()} speed={22} delayMs={120} />
           </a>
           <nav aria-label="Primary" className="hidden items-center gap-6 text-xs text-neon-dim md:flex">
-            <a href="#about" className="hover:text-neon">
+            <a href="/#about" className="hover:text-neon">
               About
             </a>
-            <a href="#experience" className="hover:text-neon">
+            <a href="/#experience" className="hover:text-neon">
               Experience
             </a>
-            <a href="#projects" className="hover:text-neon">
+            <a href="/#projects" className="hover:text-neon">
               Projects
             </a>
-            <a href="#skills" className="hover:text-neon">
+            <a href="/#skills" className="hover:text-neon">
               Skills
             </a>
-            <a href="#contact" className="hover:text-neon">
+            <a href="/#contact" className="hover:text-neon">
               Contact
             </a>
           </nav>

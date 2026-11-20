@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { track } from '@vercel/analytics';
 import { profile } from '@/data/profile';
 import { TypewriterText } from './TypewriterText';
 
@@ -40,6 +41,7 @@ export const NeonShell: FC<NeonShellProps> = ({ children }) => {
           </nav>
           <a
             href={profile.resumePath}
+            onClick={() => track('cta_resume')}
             className="border border-cyan-300/80 bg-cyan-400 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-canvas transition-colors hover:bg-cyan-300"
           >
             Resume
